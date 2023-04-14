@@ -43,7 +43,7 @@ aie.g_var.set_var(aie.g_var.GVarKey.Log.LOG_LEVEL, aie.g_var.LogLevel.INFO_LEVEL
 
 ```
 # 地物分类样本集
-from aietorch.datasets.aie.aie_dataset import LandcoverDataset
+from aie.aietorch.datasets.aie.aie_dataset import LandcoverDataset
 
 
 # 使用dataset id获取云上样本集
@@ -86,7 +86,7 @@ myDataSet = LandcoverDataset(411, data_root=work_dir, classes_filter=['industria
 
 
 ```
-from aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
+from aie.aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
 
 # 使用dataset id获取云上样本集
 myDataSet = BinaryChangeDetDataset(415, data_root=work_dir)
@@ -99,7 +99,7 @@ myDataSet = BinaryChangeDetDataset(415, data_root=work_dir)
 
 
 ```
-from aietorch.datasets.aie.aie_dataset import TargetExtractionDateset
+from aie.aietorch.datasets.aie.aie_dataset import TargetExtractionDateset
 
 # 使用dataset id获取云上样本集
 myDataSet = TargetExtractionDateset(413, data_root=work_dir)

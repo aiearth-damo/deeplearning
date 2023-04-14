@@ -6,8 +6,8 @@
 
 ```Python
 # use custom model
-from aietorch.models.changedet import ChangedetEncoderDecoder
-from aietorch.engine.mmseg.models.builder import SEGMENTORS
+from aie.aietorch.models.changedet import ChangedetEncoderDecoder
+from aie.aietorch.engine.mmseg.models.builder import SEGMENTORS
 
 @SEGMENTORS.register_module
 class MyChangedetEncoder(ChangedetEncoderDecoder):

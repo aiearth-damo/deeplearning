@@ -10,9 +10,9 @@ MMSegTrainer实现了Trainer中定义的接口，可通过mmseg engine发起模�
 
 |  算法类型   | 引用地址  | 支持样本集类型
 |  ----  | ----  | ---- |
-| 变化检测  | from aietorch.trainer.mmseg import ChangeDetTrainer  | aietorch.datasets.aie.BinaryChangeDetDataset, aietorch.datasets.ChangeDetNonGeoCustomDataset |
-| 地物分类 | from aietorch.trainer.mmseg.LandcoverTrainer | aietorch.datasets.aie.LandcoverDataset, aietorch.datasets.LandcoverNonGeoCustomDataset | 
-| 目标提取（地物识别）| from aietorch.trainer.mmseg.TargetExctractionTrainer | aietorch.dataset.aie.TargetExctractionDataset, aietorch.datasets.TargetExctractionNonGeoCustomDataset,aietorch.datasets.aie.LandcoverDataset |
+| 变化检测  | from aie.aietorch.trainer.mmseg import ChangeDetTrainer  | aietorch.datasets.aie.BinaryChangeDetDataset, aietorch.datasets.ChangeDetNonGeoCustomDataset |
+| 地物分类 | from aie.aietorch.trainer.mmseg.LandcoverTrainer | aietorch.datasets.aie.LandcoverDataset, aietorch.datasets.LandcoverNonGeoCustomDataset | 
+| 目标提取（地物识别）| from aie.aietorch.trainer.mmseg.TargetExctractionTrainer | aietorch.dataset.aie.TargetExctractionDataset, aietorch.datasets.TargetExctractionNonGeoCustomDataset,aietorch.datasets.aie.LandcoverDataset |
 
 
 
@@ -61,10 +61,10 @@ TargetExtractionTrainer(work_dir="./workspace", config_name="fcn_hr18_1024x1024_
 
 job示例
 ```python
-from aietorch.job import TrainJob
-from aietorch.datasets.aie import BinaryChangeDetDataset
-from aietorch.trainer.mmseg import ChangeDetTrainer
-from aietorch.sampler import RandomNonGeoDatasetSampler
+from aie.aietorch.job import TrainJob
+from aie.aietorch.datasets.aie import BinaryChangeDetDataset
+from aie.aietorch.trainer.mmseg import ChangeDetTrainer
+from aie.aietorch.sampler import RandomNonGeoDatasetSampler
 
 class Job(TrainJob):
     work_dir = "./work_dir"
@@ -127,7 +127,7 @@ if __name__ == '__main__':
 
 
 ```python
-from aietorch.cloud.trainer import JobCloudWrap
+from aie.aietorch.cloud.trainer import JobCloudWrap
 
 if __name__ == '__main__':
     # 必须设置aie参数

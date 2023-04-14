@@ -9,7 +9,7 @@
 - 文件格式：单通道png
 - 数据形式：类目由该类目在classes中索引值表示。如classes为['background', 'change']，则background在影像中用像素值0表示，change在影像中用像素值1表示。
 ```python
-from aietorch.datasets.datasets import ChangeDetNonGeoCustomDataset
+from aie.aietorch.datasets.datasets import ChangeDetNonGeoCustomDataset
 
 myDataSet = ChangeDetNonGeoCustomDataset(
     classes=['background', 'change'],
@@ -43,7 +43,7 @@ myDataSet = ChangeDetNonGeoCustomDataset(
 - 数据形式：类目由该类目在classes中索引值表示。如classes为['industrial_land', 'garden_land', 'arbor_forest']，则industrial_land在影像中用像素值0表示，garden_land在影像中用像素值1表示，以此类推
 - 特殊说明：地物分类样本需全像素标注，未标注区域自动转换成像素0，像素值255为待定区域，训练时忽略该区域。
 ```python
-from aietorch.datasets.datasets import LandcoverNonGeoCustomDataset
+from aie.aietorch.datasets.datasets import LandcoverNonGeoCustomDataset
 
 
 classes = ['industrial_land',
@@ -90,7 +90,7 @@ myDataSet = LandcoverNonGeoCustomDataset(
 - 文件格式：单通道png
 - 数据形式：类目由该类目在classes中索引值表示。如classes为['industrial_land', 'garden_land', 'arbor_forest']，则industrial_land在影像中用像素值0表示，garden_land在影像中用像素值1表示，以此类推
 ```python
-from aietorch.datasets.datasets import TargetExtractionNonGeoCustomDataset
+from aie.aietorch.datasets.datasets import TargetExtractionNonGeoCustomDataset
 
 
 classes = ['background', 'target']
