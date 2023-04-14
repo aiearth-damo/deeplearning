@@ -1,16 +1,15 @@
 import os
-os.environ['SDK_CLIENT_HOST'] = 'https://pre-engine-aiearth.aliyun.com'
 import aie
 
-from aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
-from aietorch.trainer.mmseg import ChangeDetTrainer
-from aietorch.sampler import RandomNonGeoDatasetSampler
+from aie.aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
+from aie.aietorch.trainer.mmseg import ChangeDetTrainer
+from aie.aietorch.sampler import RandomNonGeoDatasetSampler
 
 
 
 if __name__ == '__main__':
     # 获取aie样本集
-    aie.Authenticate("5a15bf07bb40c4d35c1429b22bb3245a")
+    aie.Authenticate()
     aie.g_var.set_var(aie.g_var.GVarKey.Log.LOG_LEVEL, aie.g_var.LogLevel.INFO_LEVEL)
     
     work_dir = "./work_dirs/tutorial"

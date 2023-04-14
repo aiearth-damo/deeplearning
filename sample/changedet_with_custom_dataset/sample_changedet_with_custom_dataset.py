@@ -1,10 +1,10 @@
 import os
 import aie
 
-from aietorch.trainer.mmseg.changedet_trainer import ChangeDetTrainer
-from aietorch.sampler import RandomNonGeoDatasetSampler
-from aietorch.job.train_job import TrainJob
-from aietorch.datasets.datasets import ChangeDetNonGeoCustomDataset
+from aie.aietorch.trainer.mmseg.changedet_trainer import ChangeDetTrainer
+from aie.aietorch.sampler import RandomNonGeoDatasetSampler
+from aie.aietorch.job.train_job import TrainJob
+from aie.aietorch.datasets.datasets import ChangeDetNonGeoCustomDataset
 
 class Job(TrainJob):
     work_dir = "./work_dir"

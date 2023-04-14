@@ -16,10 +16,18 @@ AIE SDK是一个用于遥感图像处理的深度学习框架。它提供了本�
 
 ## 安装
 
-```
+```shell
+# from pip 
+pip install aie-aietorch
+
 # for devel
-pip install -e . -r requirements.txt
-mim install mmcv-full==1.7.1
+pip install -e .
+
+
+# build package and install by package
+bash scripts/build_pkg.sh
+pip install dist/aie-aietorch-0.1.tar.gz
+
 ```
 
 ## SDK使用
