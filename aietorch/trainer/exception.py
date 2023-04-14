@@ -1,0 +1,2 @@
+class TrainerException(Exception):
+    pass

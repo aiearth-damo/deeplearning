@@ -1,0 +1,106 @@
+# AIE云上样本集使用
+
+
+## 前期准备
+### 概念介绍
+#### 1）样本集ID
+在AIE云平台模型训练->样本管理系统中，所管理的样本集均有唯一的ID值，可通过ID精确匹配目标样本集。样本集ID可通过页面查看样本集详情时，URL路径的最后一个路径的数字既为样本id
+
+
+```
+URL: https://engine-aiearth.aliyun.com/#/portal/model/sample/detail/600040?pageNo=1
+
+样本集ID: 600040
+```
+
+#### 2) 样本集名称
+在AIE云平台模型训练->样本管理系统中，所管理的样本集均有名称，既前端页面样本名称列所展示的字段。该名称可重复，可在SDK中通过名称进行搜索，返回值是一个列表，需要用户自行判断。
+
+## quick start
+
+### 配置AIE平台Token
+
+
+以下步骤全局设置一次就可以
+
+
+```
+# Authenticate无参数会进入交互式shell输入token
+aie.Authenticate()
+
+
+# Authenticate也可以直接配置token
+token = 'xxxxxxxxxxxx'
+aie.Authenticate(token)
+
+
+# 配置aie平台所需变量，必须
+aie.g_var.set_var(aie.g_var.GVarKey.Log.LOG_LEVEL, aie.g_var.LogLevel.INFO_LEVEL)
+```
+
+
+### 地物分类样本集
+
+```
+# 地物分类样本集
+from aietorch.datasets.aie.aie_dataset import LandcoverDataset
+
+
+# 使用dataset id获取云上样本集
+# LandcoverDataset(dataset_id, data_root=os.getcwd(), classes_filter=[])
+myDataSet = LandcoverDataset(411, data_root=work_dir)
+
+print(myDataSet.classes)
+# output
+['背景',
+ 'industrial_land',
+ 'garden_land',
+ 'urban_residential',
+ 'arbor_forest',
+ 'rural_residential',
+ 'shrub_land',
+ 'traffic_land',
+ 'natural_meadow',
+ 'paddy_field',
+ 'artificial_meadow',
+ 'irrigated_land',
+ 'river',
+ 'dry_cropland',
+ 'lake',
+ 'pond']
+
+ # 提取某些类目，其他类目作为背景
+myDataSet.set_classes_filter(['industrial_land'])
+print(myDataSet.classes)
+# output
+['background', 'industrial_land']
+
+# 在样本集初始化时直接提取类目
+myDataSet = LandcoverDataset(411, data_root=work_dir, classes_filter=['industrial_land'])
+
+```
+
+
+### 变化检测样本集(二分类)
+
+
+
+```
+from aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
+
+# 使用dataset id获取云上样本集
+myDataSet = BinaryChangeDetDataset(415, data_root=work_dir)
+
+```
+
+
+
+### 目标提取（地物识别）
+
+
+```
+from aietorch.datasets.aie.aie_dataset import TargetExtractionDateset
+
+# 使用dataset id获取云上样本集
+myDataSet = TargetExtractionDateset(413, data_root=work_dir)
+```

@@ -1,0 +1,15 @@
+numpy<=1.23.0
+aie-sdk
+torch < 2.0.0
+openmim
+rasterio
+opencv-python
+opencv-python-headless
+torchvision
+prettytable
+scikit-image
+imgaug
+pycocotools
+tensorboard
+onnxruntime
+onnx
