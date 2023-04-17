@@ -7,7 +7,7 @@
 AIE SDK是一个用于遥感图像处理的深度学习框架。它提供了本地与云端联动的能力，丰富的数据集获取与使用，易用性和可扩展性。在训练和推理方面都有很好的表现。
 
 ## 最新进展
-[2023.3.x]
+[2023.04.15]
 
 版本0.1发布。
 
@@ -46,7 +46,7 @@ SDK与阿里云AI Earth地球科学云平台（简称AIE平台）深度集成，
 在代码中调用aie.Authenticate()，也会提示申请链接并等待输入。效果如下：
 ```
 请将以下地址粘贴到Web浏览器中，访问授权页面，并将个人token粘贴到输入框中
-         https://pre-engine-aiearth.aliyun.com/#/utility/auth-token
+         https://engine-aiearth.aliyun.com/#/utility/auth-token
 个人token: 
 ```
 
@@ -108,6 +108,7 @@ SDK中可直接与AIE云平台模型训练系统中样本集系统关联，无�
 
 本项目由阿里巴巴达摩院AI Earth团队维护，你可以通过如下方式联系我们：
 
-钉钉群号: 
-
-邮箱: 
+| 钉钉    | 微信  |邮箱  
+| :----------- | :-----------: |:-----------: |
+| 钉钉群号: 32152986 | 微信公众号: AI Earth数知地球 |aiearth@service.aliyun.com
+| ![钉钉群号](https://img.alicdn.com/imgextra/i2/O1CN01XW3sCk1JlBoQ5tKAd_!!6000000001068-2-tps-159-160.png "钉钉群号") | ![钉钉群号](https://img.alicdn.com/imgextra/i2/O1CN0109JceF1W63CuznFtA_!!6000000002738-2-tps-160-160.png "钉钉群号") |
