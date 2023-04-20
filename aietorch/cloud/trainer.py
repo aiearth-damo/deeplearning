@@ -189,7 +189,7 @@ class JobCloudWrap:
     def auto_generate_train_config(self):
         print("auto generate train config:", os.path.realpath(TRAIN_DEFINE_FILE))
         job_class = self.job.__class__.__name__
-        frame = inspect.stack()[1]
+        frame = inspect.stack()[-1]
         module = inspect.getmodule(frame[0])
         filename = module.__file__
         model_name = os.path.relpath(filename, os.getcwd())
