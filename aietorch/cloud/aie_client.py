@@ -1,11 +1,9 @@
 import os
-os.environ['SDK_CLIENT_HOST'] = 'https://pre-engine-aiearth.aliyun.com'
 import json
 import urllib.parse
 import requests
-from tempfile import gettempdir, NamedTemporaryFile
 import aie
-from aie.client import BaseClient, Endpoints
+from aie.client import BaseClient
 from aie.error import AIEError, AIEErrorCode
 from aietorch.utils.file import zip_dir
 import aie.g_var as g_var

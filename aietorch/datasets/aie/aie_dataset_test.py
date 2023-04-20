@@ -1,5 +1,4 @@
 import os
-os.environ['SDK_CLIENT_HOST'] = 'https://pre-engine-aiearth.aliyun.com'
 
 import aie
 import aie.g_var as g_var

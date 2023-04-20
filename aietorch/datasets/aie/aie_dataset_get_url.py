@@ -1,11 +1,9 @@
 import os
-os.environ['SDK_CLIENT_HOST'] = 'https://pre-engine-aiearth.aliyun.com'
 
 from aie.client import BaseClient, Endpoints
 from aie.error import AIEError
 import aie
 import aie.g_var as g_var
-import json
 
 class TestDataSet(BaseClient):
     __sampleinfo_host = Endpoints.HOST + "/trainSDK"
