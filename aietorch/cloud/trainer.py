@@ -94,7 +94,8 @@ class CloudModelAPI():
     def model_create(cls, code_dir, model_name, model_type, categoryJson, img_std, 
                      img_mean, fp16=False, gpu_num=2 ,desc="", onnx_shape=(1024, 1024)):
         #create temp zip file
-        with NamedTemporaryFile(prefix=gettempdir(), suffix=".zip", delete=True) as fp:
+        tempdir = gettempdir + os.sep
+        with NamedTemporaryFile(prefix=tempdir, suffix=".zip", delete=True) as fp:
             model_id = cls.__model_create(model_name, model_type, categoryJson, img_std, 
                          img_mean, fp16, gpu_num ,desc, onnx_shape)
             code_pkg_path = fp.name

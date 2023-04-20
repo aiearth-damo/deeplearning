@@ -47,6 +47,7 @@ class TrainJob():
         return self.train(*args, **kwargs)    
 
     def train(self, *args, **kwargs):
+        os.makedirs(self.work_dir, exist_ok=True)
         lock_file = os.path.join(self.work_dir, "data.lock")
         flock = Flock(lock_file)
         flock.lock()
