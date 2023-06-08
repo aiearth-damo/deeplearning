@@ -13,7 +13,7 @@
 ### 配置2
 [fcn_hr48_1024x1024_16k_landcover](fcn_hr48_1024x1024_16k_landcover.py)：
 Backbone为hrnet48的模型。使用该配置，可以训练出一个效果很好的hrnet48模型。如果你有自己的需要，可以参考此配置文件完成一次从头训练。
-另外，我们提供了基于该配置训练出来的的sota[模型](https://media.githubusercontent.com/media/aiearth-damo/aie-train/master/aiearth/train/model_zoo/pretrained/LandCover/landcover_v1.6.pth)。用户可以通过该模型出发，完成在自己数据上的微调。
+另外，我们提供了基于该配置训练出来的的sota模型：`aie://LandCover/landcover_v1.6.pth`。用户可以通过该模型出发，完成在自己数据上的微调。
 
 ### 配置3
 [fcn_hr18_1024x1024_16k_landcover_semi](fcn_hr18_1024x1024_16k_landcover_semi.py)：

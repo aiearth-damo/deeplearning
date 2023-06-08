@@ -64,13 +64,13 @@ We also support users to customize their own algorithms based on the development
 
 ## Remote Sensing Model Zoo (Model Zoo)
 
-| Task Type        | Description                                    | Model     | Crop Size | mIoU | Config                                                                                                               | Download         |
-| ---------------- | ---------------------------------------------- | --------- | --------- | ---- | -------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| ChangeDetection  | General binary change detection                | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)                | [model](xxx.pth) |
-| ChangeDetection  | Building change detection                      | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) | [model](xxx.pth) |
-| LandCover        | General land cover classification (11 classes) | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py)                                 | [model](xxx.pth) |
-| LandCover        | Semi-supervised                                | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/semi.py)                                                             | N/A              |
-| TargetExtraction | Water body extraction                          | hrnet_w18 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py)                      | [model](xxx.pth) |
+| Task Type        | Description                                    | Model     | Crop Size | mIoU | Config                                                                                                               |
+| ---------------- | ---------------------------------------------- | --------- | --------- | ---- | -------------------------------------------------------------------------------------------------------------------- |
+| ChangeDetection  | General binary change detection                | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)                |
+| ChangeDetection  | Building change detection                      | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) |
+| LandCover        | General land cover classification (11 classes) | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py)                                 |
+| LandCover        | Semi-supervised                                | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/semi.py)                                                             |
+| TargetExtraction | Water body extraction                          | hrnet_w18 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py)                      |
 
 
 ## Open Source License

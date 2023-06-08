@@ -8,7 +8,7 @@
 
 ### 配置1
 [fcn_hr18_1024x1024_40k4_bceious1w1.0](fcn_hr18_1024x1024_40k4_bceious1w1.0.py)
-使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota[水体提取模型](https://media.githubusercontent.com/media/aiearth-damo/aie-train/master/aiearth/train/model_zoo/pretrained/TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth)就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
+使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota水体提取模型：`aie://TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth`，就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
 
 ### 配置2
 [fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108](fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108.py)：

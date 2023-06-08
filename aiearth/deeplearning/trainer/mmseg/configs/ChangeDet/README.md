@@ -13,7 +13,7 @@
 
 ### 配置2
 [hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)：
-使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota[模型](https://media.githubusercontent.com/media/aiearth-damo/aie-train/master/aiearth/train/model_zoo/pretrained/ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth)就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
+使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota模型：`aie://ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth`，就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
 
 ### 配置3
 [hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.py)：
