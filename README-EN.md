@@ -33,7 +33,7 @@ After logging in to the AIE account in the browser, visit the [token application
 When calling aie.Authenticate() in the code, it will also prompt for a link to apply and wait for input. The effect is as follows:
 ```
 Please paste the following address into the web browser, access the authorization page, and paste the personal token into the input box
-         https://pre-engine-aiearth.aliyun.com/#/utility/auth-token
+         https://engine-aiearth.aliyun.com/#/utility/auth-token
 Personal token:
 ```
 
