@@ -57,11 +57,11 @@ SDK与阿里云AI Earth地球科学云平台（简称AIE平台）深度集成，
 
 
 ### 标准算法任务
-* [地物分类](train/trainer/mmseg/configs/LandCover/README.md)
-* [地物分类-半监督学习](train/trainer/mmseg/configs/LandCover/README.md#配置4-半监督训练mkd)
-* [变化检测](train/trainer/mmseg/configs/ChangeDet/README.md)
-* [建筑物变化检测](train/trainer/mmseg/configs/BuildingChange/README.md)
-* [目标提取](train/trainer/mmseg/configs/TargetExtraction/README.md)
+* [地物分类](aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md)
+* [地物分类-半监督学习](aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md#配置4-半监督训练mkd)
+* [变化检测](aiearth/deeplearning/trainer/mmseg/configs/ChangeDet/README.md)
+* [建筑物变化检测](aiearth/deeplearning/trainer/mmseg/configs/BuildingChange/README.md)
+* [目标提取](aiearth/deeplearning/trainer/mmseg/configs/TargetExtraction/README.md)
 
 ### 定制算法任务
 我们也支持用户基于不同的Engine中提供的开发范式，进行自己的算法定制。比如，定制模型结构、损失函数等。
@@ -71,11 +71,11 @@ SDK与阿里云AI Earth地球科学云平台（简称AIE平台）深度集成，
 
 |  任务类型  | 说明 | 模型 | Crop Size | Uri | config |
 | --- | --- | --- | --- | --- | --- |
-| 变化检测/ChangeDet  | 通用二分类变化 | hrnet_w18 | 896x896 | aie://ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth | [config](aiearth/train/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py) |
-| 变化检测/BuildingChange | 建筑物变化 | hrnet_w18 | 896x896 | aie://BuildingChange/buildingchange_hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.pth | [config](aiearth/train/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) |
-|  地物分类/LandCover  | 通用地物分类（11类） | hrnet_w48 | | aie://LandCover/landcover_v1.6.pth | [config](aiearth/train/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py) |
-|  地物分类/LandCover  | 半监督 | hrnet_w48  | | N/A | [config](aiearth/train/trainer/mmseg/configs/LandCover/semi.py) |
-| 目标提取/TargetExtraction | 水体提取 | hrnet_w18 | | aie://TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth | [config](aiearth/train/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py) |
+| 变化检测/ChangeDet  | 通用二分类变化 | hrnet_w18 | 896x896 | aie://ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth | [config](aiearth/deeplearning/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py) |
+| 变化检测/BuildingChange | 建筑物变化 | hrnet_w18 | 896x896 | aie://BuildingChange/buildingchange_hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.pth | [config](aiearth/deeplearning/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) |
+|  地物分类/LandCover  | 通用地物分类（11类） | hrnet_w48 | | aie://LandCover/landcover_v1.6.pth | [config](aiearth/deeplearning/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py) |
+|  地物分类/LandCover  | 半监督 | hrnet_w48  | | N/A | [config](aiearth/deeplearning/trainer/mmseg/configs/LandCover/semi.py) |
+| 目标提取/TargetExtraction | 水体提取 | hrnet_w18 | | aie://TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth | [config](aiearth/deeplearning/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py) |
 
 
 ## 开源许可证

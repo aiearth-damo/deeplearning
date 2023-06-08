@@ -3,7 +3,7 @@
 
 ## Trainer
 
-Trainer是定义训练配置，训练过程的class。[定义文件](../../aiearth/train/trainer/trainer.py)
+Trainer是定义训练配置，训练过程的class。[定义文件](../../aiearth/deeplearning/trainer/trainer.py)
 
 ### MMSegTrainer
 MMSegTrainer实现了Trainer中定义的接口，可通过mmseg engine发起模型训练。样本集使用参照[云上样本集使用](../dataset/cloud.md)，[本地样本集使用](../dataset/custom.md)
@@ -32,11 +32,11 @@ TargetExtractionTrainer(work_dir="./workspace", config_name="fcn_hr18_1024x1024_
 参数说明
 * work_dir: 训练任务的工作路径，日志、模型文件会保存在该目录下
 * config_name: 预置的配置名称，具体请参考
-  + [地物分类](../../aiearth/train/trainer/mmseg/configs/LandCover/README.md)
-  + [地物分类-半监督学习](../../aiearth/train/trainer/mmseg/configs/LandCover/README.md#配置4-半监督训练mkd)
-  + [变化检测](../../aiearth/train/trainer/mmseg/configs/ChangeDet/README.md)
-  + [建筑物变化检测](../../aiearth/train/trainer/mmseg/configs/BuildingChange/README.md)
-  + [目标提取](../../aiearth/train/trainer/mmseg/configs/TargetExtraction/README.md)
+  + [地物分类](../../aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md)
+  + [地物分类-半监督学习](../../aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md#配置4-半监督训练mkd)
+  + [变化检测](../../aiearth/deeplearning/trainer/mmseg/configs/ChangeDet/README.md)
+  + [建筑物变化检测](../../aiearth/deeplearning/trainer/mmseg/configs/BuildingChange/README.md)
+  + [目标提取](../../aiearth/deeplearning/trainer/mmseg/configs/TargetExtraction/README.md)
 
 
 

@@ -52,11 +52,11 @@ For different types of tasks, we provide specialized documentation for guidance.
 * [training job](docs/train/train.md)
 
 ### Standard Algorithm Tasks
-* [Land Cover Classification](train/trainer/mmseg/configs/LandCover/README.md)
-* [Land Cover Classification - Semi-Supervised Learning](train/trainer/mmseg/configs/LandCover/README.md#configuration-4-semi-supervised-training-mkd)
-* [Change Detection](train/trainer/mmseg/configs/ChangeDet/README.md)
-* [Building Change Detection](train/trainer/mmseg/configs/BuildingChange/README.md)
-* [Object Extraction](train/trainer/mmseg/configs/TargetExtraction/README.md)
+* [Land Cover Classification](aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md)
+* [Land Cover Classification - Semi-Supervised Learning](aiearth/deeplearning/trainer/mmseg/configs/LandCover/README.md#configuration-4-semi-supervised-training-mkd)
+* [Change Detection](aiearth/deeplearning/trainer/mmseg/configs/ChangeDet/README.md)
+* [Building Change Detection](aiearth/deeplearning/trainer/mmseg/configs/BuildingChange/README.md)
+* [Object Extraction](aiearth/deeplearning/trainer/mmseg/configs/TargetExtraction/README.md)
 
 ### Custom Algorithm Tasks
 We also support users to customize their own algorithms based on the development paradigm provided in different Engines. For example, customizing model structure, loss functions, etc.
@@ -66,11 +66,11 @@ We also support users to customize their own algorithms based on the development
 
 | Task Type        | Description                                    | Model     | Crop Size | mIoU | Config                                                                                                               |
 | ---------------- | ---------------------------------------------- | --------- | --------- | ---- | -------------------------------------------------------------------------------------------------------------------- |
-| ChangeDetection  | General binary change detection                | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)                |
-| ChangeDetection  | Building change detection                      | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) |
-| LandCover        | General land cover classification (11 classes) | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py)                                 |
-| LandCover        | Semi-supervised                                | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/semi.py)                                                             |
-| TargetExtraction | Water body extraction                          | hrnet_w18 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py)                      |
+| ChangeDetection  | General binary change detection                | hrnet_w18 | 896x896   | N/A  | [config](aiearth/deeplearning/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)                |
+| ChangeDetection  | Building change detection                      | hrnet_w18 | 896x896   | N/A  | [config](aiearth/deeplearning/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) |
+| LandCover        | General land cover classification (11 classes) | hrnet_w48 |           | N/A  | [config](aiearth/deeplearning/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py)                                 |
+| LandCover        | Semi-supervised                                | hrnet_w48 |           | N/A  | [config](aiearth/deeplearning/trainer/mmseg/configs/LandCover/semi.py)                                                             |
+| TargetExtraction | Water body extraction                          | hrnet_w18 |           | N/A  | [config](aiearth/deeplearning/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py)                      |
 
 
 ## Open Source License
