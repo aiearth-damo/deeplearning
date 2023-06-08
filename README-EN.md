@@ -1,25 +1,20 @@
 # AIE SDK
 
-[English](README.md) | [简体中文](README-CN.md)
+English | [简体中文](README.md)
 
 ## Introduction
 
-AIE SDK is a deep learning framework for remote sensing image processing. It provides local and cloud-based capabilities, rich data set acquisition, ease of use, and scalability. It performs well in both training and inference.
-
-## Latest Progress
-[2023.3.x]
-
-Version 0.1 released.
-
-For more detailed information on other versions, please refer to the [change log](docs/source/change_log.md).
-
+AIE SDK is a deep learning training framework for remote sensing image processing. It provides local and cloud-based capabilities, rich data set acquisition, ease of use, and scalability.
 
 ## Installation
 
 ```
 # for devel
-pip install -e . -r requirements.txt
-mim install mmcv-full==1.7.1
+pip install -e .
+
+# build package and install by package
+bash scripts/build_pkg.sh
+pip install dist/aiearth-deeplearning.tar.gz
 ```
 
 ## SDK Usage
@@ -49,41 +44,44 @@ Please refer to the [Quick Start Tutorial](quickstart.ipynb) for a quick start. 
 
 For different types of tasks, we provide specialized documentation for guidance.
 
-### Data Processing
+### Dataset Processing
+* [cloud-based dataset](docs/dataset/cloud.md)
+* [custom dataset](docs/dataset/custom.md)
+
+### Create training job
+* [training job](docs/train/train.md)
 
 ### Standard Algorithm Tasks
-* [Land Cover Classification](aietorch/trainer/mmseg/configs/LandCover/README.md)
-* [Land Cover Classification - Semi-Supervised Learning](aietorch/trainer/mmseg/configs/LandCover/README.md#configuration-4-semi-supervised-training-mkd)
-* [Change Detection](aietorch/trainer/mmseg/configs/ChangeDet/README.md)
-* [Building Change Detection](aietorch/trainer/mmseg/configs/BuildingChange/README.md)
-* [Object Extraction](aietorch/trainer/mmseg/configs/TargetExtraction/README.md)
+* [Land Cover Classification](train/trainer/mmseg/configs/LandCover/README.md)
+* [Land Cover Classification - Semi-Supervised Learning](train/trainer/mmseg/configs/LandCover/README.md#configuration-4-semi-supervised-training-mkd)
+* [Change Detection](train/trainer/mmseg/configs/ChangeDet/README.md)
+* [Building Change Detection](train/trainer/mmseg/configs/BuildingChange/README.md)
+* [Object Extraction](train/trainer/mmseg/configs/TargetExtraction/README.md)
 
 ### Custom Algorithm Tasks
 We also support users to customize their own algorithms based on the development paradigm provided in different Engines. For example, customizing model structure, loss functions, etc.
-* [Developing Your Own Model](docs/source/custom_model.md)
-
-### Cloud-based Training☁️
+* [Developing Your Own Model](docs/model/custom_model.md)
 
 ## Remote Sensing Model Zoo (Model Zoo)
 
-| Task Type | Description | Model | Crop Size | mIoU | Config | Download |
-| --- | --- | --- | --- | --- | --- | --- |
-| ChangeDetection | General binary change detection | hrnet_w18 | 896x896 | N/A | [config](/aietorch/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py) | [model](xxx.pth) |
-| ChangeDetection | Building change detection | hrnet_w18 | 896x896 | N/A | [config](/aietorch/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) | [model](xxx.pth) |
-| LandCover | General land cover classification (11 classes) | hrnet_w48 | | N/A | [config](/aietorch/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py) | [model](xxx.pth) |
-| LandCover | Semi-supervised | hrnet_w48 | | N/A | [config](/aietorch/trainer/mmseg/configs/LandCover/semi.py) | N/A |
-| TargetExtraction | Water body extraction | hrnet_w18 | | N/A | [config](/aietorch/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py) | [model](xxx.pth) |
+| Task Type        | Description                                    | Model     | Crop Size | mIoU | Config                                                                                                               | Download         |
+| ---------------- | ---------------------------------------------- | --------- | --------- | ---- | -------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| ChangeDetection  | General binary change detection                | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/ChangeDet/hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)                | [model](xxx.pth) |
+| ChangeDetection  | Building change detection                      | hrnet_w18 | 896x896   | N/A  | [config](aiearth/train/trainer/mmseg/configs/BuildingChange/hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.py) | [model](xxx.pth) |
+| LandCover        | General land cover classification (11 classes) | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/fcn_hr48_1024x1024_16k_landcover.py)                                 | [model](xxx.pth) |
+| LandCover        | Semi-supervised                                | hrnet_w48 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/LandCover/semi.py)                                                             | N/A              |
+| TargetExtraction | Water body extraction                          | hrnet_w18 |           | N/A  | [config](aiearth/train/trainer/mmseg/configs/TargetExtraction/fcn_hr18_1024x1024_40k4_bceious1w1.0.py)                      | [model](xxx.pth) |
 
 
 ## Open Source License
 
-This project uses the [Apache 2.0 open source license](LICENSE). The project contains source code for some third-party dependencies, and some implementations are borrowed from other open source repositories. Please refer to the [NOTICE file](NOTICE) for the names of the repositories and the open source license descriptions.
-
+This project uses the [Apache 2.0 open source license](LICENSE). 
 
 ## Contact Information
 
 This project is maintained by the AI Earth team of Alibaba DAMO Academy. You can contact us through the following methods:
 
-DingTalk group number: 
-
-Email: 
+| DingTalk    | WeChat  |Email  
+| :----------- | :-----------: |:-----------: |
+| DingTalk group number: 32152986 | WeChat public account: AI Earth数知地球 |aiearth@service.aliyun.com
+| ![钉钉群号](https://img.alicdn.com/imgextra/i2/O1CN01XW3sCk1JlBoQ5tKAd_!!6000000001068-2-tps-159-160.png "钉钉群号") | ![钉钉群号](https://img.alicdn.com/imgextra/i2/O1CN0109JceF1W63CuznFtA_!!6000000002738-2-tps-160-160.png "钉钉群号") |

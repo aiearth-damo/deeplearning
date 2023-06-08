@@ -1,12 +1,17 @@
+set -e
+# set -x 
+
 workdir=$(dirname $0)/../
 
 cd $workdir
 version=$(grep '^VERSION' setup.py |awk -F "\"|'" '{print $(NF-1)}')
-ProgramCommitID=$(git rev-parse HEAD)
-echo ${ProgramCommitID} > aietorch/COMMIT_ID
+short_commit_id=$(git rev-parse --short HEAD)
+commit_comment=$(git log -1 --pretty=%B)
+echo $commit_comment $short_commit_id
 
-mkdir dist
-tar zcvf dist/aie-aietorch-$version.tar.gz setup.py aietorch requirements.txt MANIFEST.in
-(cd dist && ln -sf aie-aietorch-$version.tar.gz aie-aietorch.tar.gz )
-echo "package finished: dist/aie-aietorch-$version.tar.gz"
-rm -f aietorch/COMMIT_ID
+sleep 1
+
+[ -d dist ] || mkdir dist
+tar zcf dist/aiearth-deeplearning-$version.tar.gz --exclude=aiearth/deeplearning/model_zoo/pretrained setup.py aiearth requirements.txt MANIFEST.in
+(cd dist && ln -sf aiearth-deeplearning-$version.tar.gz aiearth-deeplearning.tar.gz )
+echo "package finished: dist/aiearth-deeplearning-$version.tar.gz"

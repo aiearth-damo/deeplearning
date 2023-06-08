@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# misc
+docker
+note.md
+update_docker.sh
+.DS_Store

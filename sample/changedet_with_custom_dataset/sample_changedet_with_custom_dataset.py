@@ -1,10 +1,10 @@
 import os
 import aie
 
-from aie.aietorch.trainer.mmseg.changedet_trainer import ChangeDetTrainer
-from aie.aietorch.sampler import RandomNonGeoDatasetSampler
-from aie.aietorch.job.train_job import TrainJob
-from aie.aietorch.datasets.datasets import ChangeDetNonGeoCustomDataset
+from aiearth.deeplearning.trainer.mmseg.changedet_trainer import ChangeDetTrainer
+from aiearth.deeplearning.sampler import RandomNonGeoDatasetSampler
+from aiearth.deeplearning.job.train_job import TrainJob
+from aiearth.deeplearning.datasets import ChangeDetNonGeoCustomDataset
 
 class Job(TrainJob):
     work_dir = "./work_dir"
@@ -14,7 +14,7 @@ class Job(TrainJob):
         trainer = ChangeDetTrainer(work_dir=self.work_dir)
         trainer.cfg.runner["max_iters"] = 200    #dict(type='IterBasedRunner', max_iters=20000)
         trainer.cfg.checkpoint_config["interval"]=50
-        trainer.cfg.data.samples_per_gpu = 4
+        trainer.cfg.data.samples_per_gpu = 1
         return trainer
 
     def set_datasets(self):
@@ -37,6 +37,6 @@ class Job(TrainJob):
 
 if __name__ == '__main__':
     job = Job()
-    job.train(distributed=True)
+    job.train()
 
     

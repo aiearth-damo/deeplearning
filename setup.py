@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, find_namespace_packages
 from setuptools.command.install import install as _install
 from setuptools.command.egg_info import egg_info as _egg_info
 import sys, os
@@ -6,7 +6,7 @@ import io
 import os.path as op
 import atexit
 
-VERSION = "0.1"
+VERSION = "0.0.2"
 
 
 # get the dependencies and installs
@@ -60,13 +60,13 @@ def _post_egg_info():
     install_pkg_from_install_requires("torch")
 
 
- 
-setup(name='aietorch',
+packages = find_namespace_packages(include=['aiearth.*'])
+setup(name='aiearth-deeplearning',
       version=VERSION,
       description='AI Earth algo sdk builded by torch && mmseg',
       author='AI Earth developer team',
       author_email='yuanbin.myb@alibaba-inc.com',
-      packages=find_packages(),
+      packages=packages,
       python_requires='>=3.7.2',
       include_package_data=True,
       cmdclass={

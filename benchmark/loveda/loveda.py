@@ -1,4 +1,4 @@
-from aietorch.trainer.mmseg import LandcoverTrainer
+from aiearth.deeplearning.trainer.mmseg import LandcoverTrainer
 
 
 if __name__ == '__main__':

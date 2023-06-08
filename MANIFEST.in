@@ -1,2 +1,1 @@
-recursive-include aietorch *.py
-
+recursive-include deeplearning *.py

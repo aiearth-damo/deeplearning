@@ -8,9 +8,9 @@
 
 
 ```
-URL: https://engine-aiearth.aliyun.com/#/portal/model/sample/detail/600040?pageNo=1
+URL: https://engine-aiearth.aliyun.com/#/portal/model/sample/detail/600054?pageNo=1
 
-样本集ID: 600040
+样本集ID: 600054
 ```
 
 #### 2) 样本集名称
@@ -25,17 +25,14 @@ URL: https://engine-aiearth.aliyun.com/#/portal/model/sample/detail/600040?pageN
 
 
 ```
+import aie
 # Authenticate无参数会进入交互式shell输入token
 aie.Authenticate()
 
 
 # Authenticate也可以直接配置token
-token = 'xxxxxxxxxxxx'
-aie.Authenticate(token)
-
-
-# 配置aie平台所需变量，必须
-aie.g_var.set_var(aie.g_var.GVarKey.Log.LOG_LEVEL, aie.g_var.LogLevel.INFO_LEVEL)
+# token = 'xxxxxxxxxxxx'
+# aie.Authenticate(token)
 ```
 
 
@@ -43,41 +40,24 @@ aie.g_var.set_var(aie.g_var.GVarKey.Log.LOG_LEVEL, aie.g_var.LogLevel.INFO_LEVEL
 
 ```
 # 地物分类样本集
-from aie.aietorch.datasets.aie.aie_dataset import LandcoverDataset
+from aiearth.train.cloud.datasets import LandcoverDataset, PublicDatasetMeta
 
 
 # 使用dataset id获取云上样本集
-# LandcoverDataset(dataset_id, data_root=os.getcwd(), classes_filter=[])
-myDataSet = LandcoverDataset(411, data_root=work_dir)
+dataset = LandcoverDataset(PublicDatasetMeta.GID_15_TRAIN["dataset_id"], data_root="./landcover")
 
-print(myDataSet.classes)
+print(dataset.classes)
 # output
-['背景',
- 'industrial_land',
- 'garden_land',
- 'urban_residential',
- 'arbor_forest',
- 'rural_residential',
- 'shrub_land',
- 'traffic_land',
- 'natural_meadow',
- 'paddy_field',
- 'artificial_meadow',
- 'irrigated_land',
- 'river',
- 'dry_cropland',
- 'lake',
- 'pond']
+# ['背景', 'industrial_land', 'garden_land', 'urban_residential', 'arbor_forest', 'rural_residential', 'shrub_land', 'traffic_land', 'natural_meadow', 'paddy_field', 'artificial_meadow', 'irrigated_land', 'river', 'dry_cropland', 'lake', 'pond']
 
- # 提取某些类目，其他类目作为背景
-myDataSet.set_classes_filter(['industrial_land'])
-print(myDataSet.classes)
+# 提取某些类目，其他类目作为背景
+dataset.set_classes_filter(['industrial_land'])
+print(dataset.classes)
 # output
-['background', 'industrial_land']
+# ['background', 'industrial_land']
 
 # 在样本集初始化时直接提取类目
-myDataSet = LandcoverDataset(411, data_root=work_dir, classes_filter=['industrial_land'])
-
+dataset = LandcoverDataset(PublicDatasetMeta.GID_15_TRAIN["dataset_id"], data_root="./landcover", classes_filter=['industrial_land'])
 ```
 
 
@@ -86,11 +66,10 @@ myDataSet = LandcoverDataset(411, data_root=work_dir, classes_filter=['industria
 
 
 ```
-from aie.aietorch.datasets.aie.aie_dataset import BinaryChangeDetDataset
+from aiearth.train.cloud.datasets import BinaryChangeDetDataset, PublicDatasetMeta
 
 # 使用dataset id获取云上样本集
-myDataSet = BinaryChangeDetDataset(415, data_root=work_dir)
-
+dataset = BinaryChangeDetDataset(PublicDatasetMeta.SEMANTIC_CHANGE_DETECTION_SECOND["dataset_id"], data_root="./changedet")
 ```
 
 
@@ -99,8 +78,8 @@ myDataSet = BinaryChangeDetDataset(415, data_root=work_dir)
 
 
 ```
-from aie.aietorch.datasets.aie.aie_dataset import TargetExtractionDateset
+from aiearth.train.cloud.datasets import TargetExtractionDataset, PublicDatasetMeta
 
 # 使用dataset id获取云上样本集
-myDataSet = TargetExtractionDateset(413, data_root=work_dir)
+dataset = TargetExtractionDataset(PublicDatasetMeta.BUILDING_AERIAL_IMAGERY_TRAIN["dataset_id"], data_root="./target_extraction")
 ```

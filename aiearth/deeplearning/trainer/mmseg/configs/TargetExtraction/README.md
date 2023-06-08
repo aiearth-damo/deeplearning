@@ -1,0 +1,16 @@
+# 地物识别
+
+## 任务描述
+用于水体提取，大棚提取等任务
+
+## 配置文件介绍
+我们提供了一整套模型配置和默认参数，能够有效训练出性能优秀的模型。
+
+### 配置1
+[fcn_hr18_1024x1024_40k4_bceious1w1.0](fcn_hr18_1024x1024_40k4_bceious1w1.0.py)
+使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota[水体提取模型](https://media.githubusercontent.com/media/aiearth-damo/aie-train/master/aiearth/train/model_zoo/pretrained/TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth)就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
+
+### 配置2
+[fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108](fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108.py)：
+使用该配置可以引入额外的无标签数据对模型进行半监督训练，提升模型的表现能力。
+使用方法：使用[配置1](fcn_hr18_1024x1024_40k4_bceious1w1.0.py)得到一个sota表现的模型以后，通过[推理](/quickstart.ipynb#Test)功能对数据打伪标签，然后使用该配置完成半监督训练。

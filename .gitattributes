@@ -1,0 +1,4 @@
+aiearth/deeplearning/model_zoo/pretrained/BuildingChange/buildingchange_hrnet_w18_base_150k_new512_cosine_lr_batch_48_builingchange.pth filter=lfs diff=lfs merge=lfs -text
+aiearth/deeplearning/model_zoo/pretrained/ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth filter=lfs diff=lfs merge=lfs -text
+aiearth/deeplearning/model_zoo/pretrained/LandCover/landcover_v1.6.pth filter=lfs diff=lfs merge=lfs -text
+aiearth/deeplearning/model_zoo/pretrained/TargetExtraction/water_fcn_hr18_1024x1024_40k4_bceious1w1.0_semi0108_it1_0108_it2_0103_iter_20000.pth filter=lfs diff=lfs merge=lfs -text
