@@ -40,7 +40,7 @@ aie.Authenticate()
 
 ```
 # 地物分类样本集
-from aiearth.train.cloud.datasets import LandcoverDataset, PublicDatasetMeta
+from aiearth.deeplearning.cloud.datasets import LandcoverDataset, PublicDatasetMeta
 
 
 # 使用dataset id获取云上样本集
@@ -66,7 +66,7 @@ dataset = LandcoverDataset(PublicDatasetMeta.GID_15_TRAIN["dataset_id"], data_ro
 
 
 ```
-from aiearth.train.cloud.datasets import BinaryChangeDetDataset, PublicDatasetMeta
+from aiearth.deeplearning.cloud.datasets import BinaryChangeDetDataset, PublicDatasetMeta
 
 # 使用dataset id获取云上样本集
 dataset = BinaryChangeDetDataset(PublicDatasetMeta.SEMANTIC_CHANGE_DETECTION_SECOND["dataset_id"], data_root="./changedet")
@@ -78,7 +78,7 @@ dataset = BinaryChangeDetDataset(PublicDatasetMeta.SEMANTIC_CHANGE_DETECTION_SEC
 
 
 ```
-from aiearth.train.cloud.datasets import TargetExtractionDataset, PublicDatasetMeta
+from aiearth.deeplearning.cloud.datasets import TargetExtractionDataset, PublicDatasetMeta
 
 # 使用dataset id获取云上样本集
 dataset = TargetExtractionDataset(PublicDatasetMeta.BUILDING_AERIAL_IMAGERY_TRAIN["dataset_id"], data_root="./target_extraction")

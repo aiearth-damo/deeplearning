@@ -19,7 +19,7 @@ aie.Authenticate()
 aie.Initialize()
 
 # changeDet pretrained model
-from aiearth.train.model_zoo.model import PretrainedModel
+from aiearth.deeplearning.model_zoo.model import PretrainedModel
 model = PretrainedModel("aie://ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth")
 
 # 下载到本地的路径

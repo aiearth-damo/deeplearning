@@ -10,14 +10,14 @@ MMSegTrainer实现了Trainer中定义的接口，可通过mmseg engine发起模�
 
 |  算法类型   | 引用地址  | 支持样本集类型
 |  ----  | ----  | ---- |
-| 变化检测  | from aiearth.train.trainer.mmseg import ChangeDetTrainer  | from aiearth.train.cloud.datasets import BinaryChangeDetDataset; from aiearth.train.datasets import ChangeDetNonGeoCustomDataset |
-| 地物分类 | from aiearth.train.trainer.mmseg import LandcoverTrainer | from aiearth.train.cloud.datasets import LandcoverDataset; from aiearth.train.datasets import LandcoverNonGeoCustomDataset | 
-| 目标提取（地物识别）| from aiearth.train.trainer.mmseg import TargetExtractionTrainer | from aiearth.train.cloud.datasets import TargetExtractionDataset, LandcoverDataset; from aiearth.train.datasets import TargetExtractionNonGeoCustomDataset|
+| 变化检测  | from aiearth.deeplearning.trainer.mmseg import ChangeDetTrainer  | from aiearth.deeplearning.cloud.datasets import BinaryChangeDetDataset; from aiearth.deeplearning.datasets import ChangeDetNonGeoCustomDataset |
+| 地物分类 | from aiearth.deeplearning.trainer.mmseg import LandcoverTrainer | from aiearth.deeplearning.cloud.datasets import LandcoverDataset; from aiearth.deeplearning.datasets import LandcoverNonGeoCustomDataset | 
+| 目标提取（地物识别）| from aiearth.deeplearning.trainer.mmseg import TargetExtractionTrainer | from aiearth.deeplearning.cloud.datasets import TargetExtractionDataset, LandcoverDataset; from aiearth.deeplearning.datasets import TargetExtractionNonGeoCustomDataset|
 
 
 
 ```python
-from aiearth.train.trainer.mmseg import ChangeDetTrainer, LandcoverTrainer, TargetExtractionTrainer
+from aiearth.deeplearning.trainer.mmseg import ChangeDetTrainer, LandcoverTrainer, TargetExtractionTrainer
 
 # 变化检测
 ChangeDetTrainer(work_dir="./workspace", config_name="effi-b0_base_50k_new256_cosine_lr_batch_128_adamw")
@@ -42,7 +42,7 @@ TargetExtractionTrainer(work_dir="./workspace", config_name="fcn_hr18_1024x1024_
 
 
 ## 创建Job
-发起模型训练需定义一个模型训练Job类，该类继承自`from aiearth.train.job import TrainJob`
+发起模型训练需定义一个模型训练Job类，该类继承自`from aiearth.deeplearning.job import TrainJob`
 
 
 需要在该类中设定以下两个变量：
@@ -62,11 +62,11 @@ TargetExtractionTrainer(work_dir="./workspace", config_name="fcn_hr18_1024x1024_
 
 job示例
 ```python
-from aiearth.train.job import TrainJob
-from aiearth.train.cloud.datasets import LandcoverDataset, PublicDatasetMeta
-from aiearth.train.trainer.mmseg import LandcoverTrainer
-from aiearth.train.sampler import RandomNonGeoDatasetSampler
-from aiearth.train.model_zoo.model import PretrainedModel
+from aiearth.deeplearning.job import TrainJob
+from aiearth.deeplearning.cloud.datasets import LandcoverDataset, PublicDatasetMeta
+from aiearth.deeplearning.trainer.mmseg import LandcoverTrainer
+from aiearth.deeplearning.sampler import RandomNonGeoDatasetSampler
+from aiearth.deeplearning.model_zoo.model import PretrainedModel
 
 class Job(TrainJob):
     work_dir = "./work_dirs/tutorial"
@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
 ```python
 import aie
-from aiearth.train.cloud.trainer import JobCloudWrap
+from aiearth.deeplearning.cloud.trainer import JobCloudWrap
 
 if __name__ == '__main__':
     # 必须设置aie参数

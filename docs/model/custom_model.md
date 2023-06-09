@@ -6,8 +6,8 @@
 
 ```Python
 # use custom model
-from aiearth.train.models.changedet import ChangedetEncoderDecoder
-from aiearth.train.engine.mmseg.models.builder import SEGMENTORS
+from aiearth.deeplearning.models.changedet import ChangedetEncoderDecoder
+from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
 
 @SEGMENTORS.register_module
 class MyChangedetEncoder(ChangedetEncoderDecoder):
