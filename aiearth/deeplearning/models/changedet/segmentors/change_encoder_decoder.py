@@ -3,11 +3,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from aiearth.deeplearning.engine.mmseg.core import add_prefix
-from aiearth.deeplearning.engine.mmseg.ops import resize
-from aiearth.deeplearning.engine.mmseg.models import builder
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
-from aiearth.deeplearning.engine.mmseg.models.segmentors.base import BaseSegmentor
+from mmseg.core import add_prefix
+from mmseg.ops import resize
+from mmseg.models import builder
+from mmseg.models.builder import SEGMENTORS
+from mmseg.models.segmentors.base import BaseSegmentor
 
 
 @SEGMENTORS.register_module()
@@ -168,13 +168,11 @@ class ChangeEncoderDecoder(BaseSegmentor):
 
         losses = dict()
 
-        loss_decode = self._decode_head_forward_train(
-            x, img_metas, gt_semantic_seg)
+        loss_decode = self._decode_head_forward_train(x, img_metas, gt_semantic_seg)
         losses.update(loss_decode)
 
         if self.with_auxiliary_head:
-            loss_aux = self._auxiliary_head_forward_train(
-                x, img_metas, gt_semantic_seg)
+            loss_aux = self._auxiliary_head_forward_train(x, img_metas, gt_semantic_seg)
             losses.update(loss_aux)
 
         return losses

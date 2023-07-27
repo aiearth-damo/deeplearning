@@ -11,8 +11,8 @@ from mmcv.runner import BaseModule
 from mmcv.utils.parrots_wrapper import _BatchNorm
 from mmcv.runner import Sequential
 
-from aiearth.deeplearning.engine.mmseg.models.builder import BACKBONES
-from aiearth.deeplearning.engine.mmseg.models.backbones.resnet import BasicBlock, Bottleneck
+from mmseg.models.builder import BACKBONES
+from mmseg.models.backbones.resnet import BasicBlock, Bottleneck
 
 
 class SELayer(nn.Module):
@@ -318,7 +318,7 @@ class SEResNet(BaseModule):
             Default: None
 
     Example:
-        >>> from aiearth.deeplearning.engine.mmseg.models import ResNet
+        >>> from mmseg.models import ResNet
         >>> import torch
         >>> self = ResNet(depth=18)
         >>> self.eval()
@@ -388,8 +388,7 @@ class SEResNet(BaseModule):
             if init_cfg is None:
                 self.init_cfg = [
                     dict(type="Kaiming", layer="Conv2d"),
-                    dict(type="Constant", val=1, layer=[
-                         "_BatchNorm", "GroupNorm"]),
+                    dict(type="Constant", val=1, layer=["_BatchNorm", "GroupNorm"]),
                 ]
                 block = self.arch_settings[depth][0]
                 if self.zero_init_residual:
@@ -446,9 +445,8 @@ class SEResNet(BaseModule):
             else:
                 stage_plugins = None
             # multi grid is applied to last layer only
-            stage_multi_grid = multi_grid if i == len(
-                self.stage_blocks) - 1 else None
-            planes = base_channels * 2 ** i
+            stage_multi_grid = multi_grid if i == len(self.stage_blocks) - 1 else None
+            planes = base_channels * 2**i
             res_layer = self.make_res_layer(
                 block=self.block,
                 se_ratio=self.se_ratio,
@@ -476,8 +474,7 @@ class SEResNet(BaseModule):
         self._freeze_stages()
 
         self.feat_dim = (
-            self.block.expansion * base_channels *
-            2 ** (len(self.stage_blocks) - 1)
+            self.block.expansion * base_channels * 2 ** (len(self.stage_blocks) - 1)
         )
 
     def make_stage_plugins(self, plugins, stage_idx):
@@ -657,8 +654,7 @@ class SEResNetV1c(SEResNet):
     """
 
     def __init__(self, **kwargs):
-        super(SEResNetV1c, self).__init__(
-            deep_stem=True, avg_down=False, **kwargs)
+        super(SEResNetV1c, self).__init__(deep_stem=True, avg_down=False, **kwargs)
 
 
 @BACKBONES.register_module()
@@ -671,5 +667,4 @@ class SEResNetV1d(SEResNet):
     """
 
     def __init__(self, **kwargs):
-        super(SEResNetV1d, self).__init__(
-            deep_stem=True, avg_down=True, **kwargs)
+        super(SEResNetV1d, self).__init__(deep_stem=True, avg_down=True, **kwargs)

@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from aiearth.deeplearning.engine.mmseg.models.builder import LOSSES
-from aiearth.deeplearning.engine.mmseg.models.losses.utils import weight_reduce_loss
+from mmseg.models.builder import LOSSES
+from mmseg.models.losses.utils import weight_reduce_loss
 
 
 @LOSSES.register_module()
@@ -126,8 +126,7 @@ class DiceBceLoss(nn.Module):
         if self.focal:
             a = self.focal_loss(y_true, y_pred)
         else:
-            a = F.binary_cross_entropy(
-                y_pred, y_true, weight=None, reduction="none")
+            a = F.binary_cross_entropy(y_pred, y_true, weight=None, reduction="none")
         a = a.squeeze(1)
         b = self.soft_dice_loss(y_true, y_pred, valid_mask)
         loss = a + b

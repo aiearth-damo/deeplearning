@@ -6,7 +6,7 @@ import io
 import os.path as op
 import atexit
 
-VERSION = "0.0.2"
+VERSION = "0.0.3"
 
 
 # get the dependencies and installs

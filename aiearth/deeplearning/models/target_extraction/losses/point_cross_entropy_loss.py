@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from aiearth.deeplearning.engine.mmseg.models.builder import LOSSES
-from aiearth.deeplearning.engine.mmseg.models.losses.utils import get_class_weight, weight_reduce_loss
+from mmseg.models.builder import LOSSES
+from mmseg.models.losses.utils import get_class_weight, weight_reduce_loss
 
 
 def fuse_cross_entropy(
@@ -28,8 +28,7 @@ def fuse_cross_entropy(
     # bug fix
     points = (label != ignore_index).reshape(label.shape[0], -1)
     points_batch = points.sum(dim=1) < point_num
-    points = points_batch.unsqueeze(
-        dim=-1).unsqueeze(dim=-1) * torch.ones_like(label)
+    points = points_batch.unsqueeze(dim=-1).unsqueeze(dim=-1) * torch.ones_like(label)
     B = points_batch.shape[0]
     mask_images = (label != ignore_index) & (points != 1)
     mask_points = (label != ignore_index) & (points == 1)
@@ -127,8 +126,7 @@ def binary_cross_entropy(
             "Only pred shape [N, C], label shape [N] or pred shape [N, C, "
             "H, W], label shape [N, H, W] are supported"
         )
-        label, weight = _expand_onehot_labels(
-            label, weight, pred.shape, ignore_index)
+        label, weight = _expand_onehot_labels(label, weight, pred.shape, ignore_index)
 
     # weighted element-wise losses
     if weight is not None:
@@ -137,8 +135,7 @@ def binary_cross_entropy(
         pred, label.float(), pos_weight=class_weight, reduction="none"
     )
     # do the reduction for the weighted loss
-    loss = weight_reduce_loss(
-        loss, weight, reduction=reduction, avg_factor=avg_factor)
+    loss = weight_reduce_loss(loss, weight, reduction=reduction, avg_factor=avg_factor)
 
     return loss
 

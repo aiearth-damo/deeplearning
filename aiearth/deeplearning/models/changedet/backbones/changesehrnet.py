@@ -11,9 +11,9 @@ from mmcv.cnn import build_conv_layer, build_norm_layer
 from mmcv.runner import BaseModule, ModuleList, Sequential
 from mmcv.utils.parrots_wrapper import _BatchNorm
 
-from aiearth.deeplearning.engine.mmseg.ops import Upsample, resize
-from aiearth.deeplearning.engine.mmseg.models.builder import BACKBONES
-from aiearth.deeplearning.engine.mmseg.models.backbones.resnet import BasicBlock, Bottleneck
+from mmseg.ops import Upsample, resize
+from mmseg.models.builder import BACKBONES
+from mmseg.models.backbones.resnet import BasicBlock, Bottleneck
 
 from .changeseresnet import ChangeSEBasicBlock, ChangeSEBottleneck
 
@@ -85,8 +85,7 @@ class ChangeSEBasicBlock(BasicBlock):
     """
 
     def __init__(self, in_channels, out_channels, se_ratio=8, **kwargs):
-        super(ChangeSEBasicBlock, self).__init__(
-            in_channels, out_channels, **kwargs)
+        super(ChangeSEBasicBlock, self).__init__(in_channels, out_channels, **kwargs)
         self.se_layer = ChangeSELayer(out_channels, ratio=se_ratio)
 
     def forward(self, x):
@@ -129,10 +128,8 @@ class ChangeSEBottleneck(Bottleneck):
     """
 
     def __init__(self, in_channels, out_channels, se_ratio=8, **kwargs):
-        super(ChangeSEBottleneck, self).__init__(
-            in_channels, out_channels, **kwargs)
-        self.se_layer = ChangeSELayer(
-            out_channels * self.expansion, ratio=se_ratio)
+        super(ChangeSEBottleneck, self).__init__(in_channels, out_channels, **kwargs)
+        self.se_layer = ChangeSELayer(out_channels * self.expansion, ratio=se_ratio)
 
     def forward(self, x):
         def _inner_forward(x):
@@ -191,8 +188,7 @@ class HRModule(BaseModule):
     ):
         super(HRModule, self).__init__(init_cfg)
         self.block_init_cfg = block_init_cfg
-        self._check_branches(num_branches, num_blocks,
-                             in_channels, num_channels)
+        self._check_branches(num_branches, num_blocks, in_channels, num_channels)
 
         self.in_channels = in_channels
         self.num_branches = num_branches
@@ -265,8 +261,7 @@ class HRModule(BaseModule):
                 init_cfg=self.block_init_cfg,
             )
         )
-        self.in_channels[branch_index] = num_channels[branch_index] * \
-            block.expansion
+        self.in_channels[branch_index] = num_channels[branch_index] * block.expansion
         for i in range(1, num_blocks[branch_index]):
             layers.append(
                 block(
@@ -287,8 +282,7 @@ class HRModule(BaseModule):
         branches = []
 
         for i in range(num_branches):
-            branches.append(self._make_one_branch(
-                i, block, num_blocks, num_channels))
+            branches.append(self._make_one_branch(i, block, num_blocks, num_channels))
 
         return ModuleList(branches)
 
@@ -342,8 +336,7 @@ class HRModule(BaseModule):
                                         padding=1,
                                         bias=False,
                                     ),
-                                    build_norm_layer(
-                                        self.norm_cfg, in_channels[i])[1],
+                                    build_norm_layer(self.norm_cfg, in_channels[i])[1],
                                 )
                             )
                         else:
@@ -358,8 +351,7 @@ class HRModule(BaseModule):
                                         padding=1,
                                         bias=False,
                                     ),
-                                    build_norm_layer(
-                                        self.norm_cfg, in_channels[j])[1],
+                                    build_norm_layer(self.norm_cfg, in_channels[j])[1],
                                     nn.ReLU(inplace=False),
                                 )
                             )
@@ -419,7 +411,7 @@ class ChangeSEHRNet(BaseModule):
             Default: None
 
     Example:
-        >>> from aiearth.deeplearning.engine.mmseg.models import HRNet
+        >>> from mmseg.models import HRNet
         >>> import torch
         >>> extra = dict(
         >>>     stage1=dict(
@@ -458,8 +450,7 @@ class ChangeSEHRNet(BaseModule):
         (1, 256, 1, 1)
     """
 
-    blocks_dict = {"BASIC": ChangeSEBasicBlock,
-                   "BOTTLENECK": ChangeSEBottleneck}
+    blocks_dict = {"BASIC": ChangeSEBasicBlock, "BOTTLENECK": ChangeSEBottleneck}
 
     def __init__(
         self,
@@ -491,8 +482,7 @@ class ChangeSEHRNet(BaseModule):
             if init_cfg is None:
                 self.init_cfg = [
                     dict(type="Kaiming", layer="Conv2d"),
-                    dict(type="Constant", val=1, layer=[
-                         "_BatchNorm", "GroupNorm"]),
+                    dict(type="Constant", val=1, layer=["_BatchNorm", "GroupNorm"]),
                 ]
         else:
             raise TypeError("pretrained must be a str or None")
@@ -557,8 +547,7 @@ class ChangeSEHRNet(BaseModule):
 
         block = self.blocks_dict[block_type]
         num_channels = [channel * block.expansion for channel in num_channels]
-        self.transition2 = self._make_transition_layer(
-            pre_stage_channels, num_channels)
+        self.transition2 = self._make_transition_layer(pre_stage_channels, num_channels)
         self.stage3, pre_stage_channels = self._make_stage(
             self.stage3_cfg, num_channels
         )
@@ -570,8 +559,7 @@ class ChangeSEHRNet(BaseModule):
 
         block = self.blocks_dict[block_type]
         num_channels = [channel * block.expansion for channel in num_channels]
-        self.transition3 = self._make_transition_layer(
-            pre_stage_channels, num_channels)
+        self.transition3 = self._make_transition_layer(pre_stage_channels, num_channels)
         self.stage4, pre_stage_channels = self._make_stage(
             self.stage4_cfg, num_channels
         )

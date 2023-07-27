@@ -2,11 +2,11 @@
 import torch
 import torch.nn as nn
 
-from aiearth.deeplearning.engine.mmseg.models.builder import HEADS
-from aiearth.deeplearning.engine.mmseg.models.decode_heads.decode_head import BaseDecodeHead
-from aiearth.deeplearning.engine.mmseg.models.decode_heads.uper_head import UPerHead
+from mmseg.models.builder import HEADS
+from mmseg.models.decode_heads.decode_head import BaseDecodeHead
+from .uper_head import CostomUPerHead
 from mmcv.runner import force_fp32
-from aiearth.deeplearning.engine.mmseg.ops import resize
+from mmseg.ops import resize
 
 
 def accuracy(pred, target, topk=1, thresh=None, ignore_index=None):
@@ -40,8 +40,7 @@ def accuracy(pred, target, topk=1, thresh=None, ignore_index=None):
         return accu[0] if return_single else accu
     assert pred.ndim == target.ndim + 1
     assert pred.size(0) == target.size(0)
-    assert maxk <= pred.size(
-        1), f"maxk {maxk} exceeds pred dimension {pred.size(1)}"
+    assert maxk <= pred.size(1), f"maxk {maxk} exceeds pred dimension {pred.size(1)}"
     pred_value, pred_label = pred.topk(maxk, dim=1)
     # transpose to shape (maxk, N, ...)
     pred_label = pred_label.transpose(0, 1)
@@ -173,7 +172,7 @@ class ChangeDetHead(BaseDecodeHead):
 
 
 @HEADS.register_module()
-class ChangeDetMCDUPerHead(UPerHead):
+class ChangeDetMCDUPerHead(CostomUPerHead):
     """Why not use built-in UPerHead:
     (1) Custom multi-class accuracy without bg implementaed here.
     (2) Built-in mmseg does not support ce loss with ignore_index,
@@ -210,8 +209,7 @@ class ChangeDetMCDUPerHead(UPerHead):
                 nn.BatchNorm2d(head_channels, momentum=0.1),
                 nn.ReLU(inplace=True),
             )
-            self.danqi_up2 = nn.ConvTranspose2d(
-                head_channels, self.num_classes, 2, 2)
+            self.danqi_up2 = nn.ConvTranspose2d(head_channels, self.num_classes, 2, 2)
 
     def _forward_feature(self, inputs):
         """Just copy from latest mmseg code.

@@ -5,13 +5,14 @@ import torch.nn.functional as F
 import mmcv
 from mmcv.cnn import ConvModule, xavier_init
 
-from aiearth.deeplearning.engine.mmseg.models.builder import NECKS
+from mmseg.models.builder import NECKS
 
 
 class ConvBlock(nn.Module):
     """
     The ConvBlock module is a basic building block for the decoder.
     """
+
     def __init__(self, num_channels, momentum=0.9997, eps=4e-5):
         super(ConvBlock, self).__init__()
         self.conv = nn.Sequential(
@@ -23,10 +24,8 @@ class ConvBlock(nn.Module):
                 padding=1,
                 groups=num_channels,
             ),
-            nn.Conv2d(num_channels, num_channels,
-                      kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(num_features=num_channels,
-                           momentum=momentum, eps=eps),
+            nn.Conv2d(num_channels, num_channels, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(num_features=num_channels, momentum=momentum, eps=eps),
             nn.ReLU(),
         )
 
@@ -38,6 +37,7 @@ class Decode(nn.Module):
     """
     The Decode module is the decoder of the ChangeDetCatBifpn module.
     """
+
     def __init__(self, num_channels, epsilon=1e-4, momentum=0.9997):
         super(Decode, self).__init__()
         self.epsilon = epsilon
@@ -97,32 +97,27 @@ class Decode(nn.Module):
         p6_w1 = self.p6_w1_relu(self.p6_w1)
         weight = p6_w1 / (torch.sum(p6_w1, dim=0) + self.epsilon)
         # Connections for P6_0 and P7_0 to P6_1 respectively
-        p6_up = self.conv6_up(
-            weight[0] * p6_in + weight[1] * self.p6_upsample(p7_in))
+        p6_up = self.conv6_up(weight[0] * p6_in + weight[1] * self.p6_upsample(p7_in))
         # Weights for P5_0 and P6_0 to P5_1
         p5_w1 = self.p5_w1_relu(self.p5_w1)
         weight = p5_w1 / (torch.sum(p5_w1, dim=0) + self.epsilon)
         # Connections for P5_0 and P6_0 to P5_1 respectively
-        p5_up = self.conv5_up(
-            weight[0] * p5_in + weight[1] * self.p5_upsample(p6_up))
+        p5_up = self.conv5_up(weight[0] * p5_in + weight[1] * self.p5_upsample(p6_up))
         # Weights for P4_0 and P5_0 to P4_1
         p4_w1 = self.p4_w1_relu(self.p4_w1)
         weight = p4_w1 / (torch.sum(p4_w1, dim=0) + self.epsilon)
         # Connections for P4_0 and P5_0 to P4_1 respectively
-        p4_up = self.conv4_up(
-            weight[0] * p4_in + weight[1] * self.p4_upsample(p5_up))
+        p4_up = self.conv4_up(weight[0] * p4_in + weight[1] * self.p4_upsample(p5_up))
 
         # Weights for P3_0 and P4_1 to P3_2
         p3_w1 = self.p3_w1_relu(self.p3_w1)
         weight = p3_w1 / (torch.sum(p3_w1, dim=0) + self.epsilon)
         # Connections for P3_0 and P4_1 to P3_2 respectively
-        p3_up = self.conv3_up(
-            weight[0] * p3_in + weight[1] * self.p3_upsample(p4_up))
+        p3_up = self.conv3_up(weight[0] * p3_in + weight[1] * self.p3_upsample(p4_up))
 
         p2_w1 = self.p2_w1_relu(self.p2_w1)
         weight = p2_w1 / (torch.sum(p2_w1, dim=0) + self.epsilon)
-        p2_out = self.conv2_up(
-            weight[0] * p2_in + weight[1] * self.p2_upsample(p3_up))
+        p2_out = self.conv2_up(weight[0] * p2_in + weight[1] * self.p2_upsample(p3_up))
 
         p3_w2 = self.p3_w2_relu(self.p3_w2)
         weight = p3_w2 / (torch.sum(p3_w2, dim=0) + self.epsilon)
@@ -547,8 +542,7 @@ class Warp(nn.Module):
         out_h, out_w = size
         n, c, h, w = input.size()
 
-        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(
-            input).to(input.device)
+        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(input).to(input.device)
         # new
         h_grid = torch.linspace(-1.0, 1.0, out_h).view(-1, 1).repeat(1, out_w)
         w_gird = torch.linspace(-1.0, 1.0, out_w).repeat(out_h, 1)
@@ -563,20 +557,16 @@ class Warp(nn.Module):
         x1, x2 = x
         assert len(x1) == len(self.in_channels)
         size_ratio = [
-            torch.tensor(x1[i].shape[2:]) /
-            torch.tensor(x1[self.in_index].shape[2:])
+            torch.tensor(x1[i].shape[2:]) / torch.tensor(x1[self.in_index].shape[2:])
             for i in range(len(x1))
         ]
-        flow = self.flow_make(
-            torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
+        flow = self.flow_make(torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
 
         x2_out = []
         for i, _x2 in enumerate(x2):
             size = _x2.shape[2:]
-            _flow = F.interpolate(
-                flow, size, mode="bilinear", align_corners=True)
-            _flow = _flow * size_ratio[i][:, None,
-                                          None].type_as(_x2).to(_x2.device)
+            _flow = F.interpolate(flow, size, mode="bilinear", align_corners=True)
+            _flow = _flow * size_ratio[i][:, None, None].type_as(_x2).to(_x2.device)
             warp = self.flow_warp(_x2, _flow, size)
             x2_out.append(warp)
         return [x1, x2_out]
@@ -647,8 +637,7 @@ class ChangeDetCatBifpnShift(ChangeDetCatBifpn):
         out_h, out_w = size
         n, c, h, w = input.size()
 
-        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(
-            input).to(input.device)
+        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(input).to(input.device)
         # new
         h_grid = torch.linspace(-1.0, 1.0, out_h).view(-1, 1).repeat(1, out_w)
         w_gird = torch.linspace(-1.0, 1.0, out_w).repeat(out_h, 1)
@@ -664,12 +653,10 @@ class ChangeDetCatBifpnShift(ChangeDetCatBifpn):
         x1, x2 = x
         assert len(x1) == len(self.in_channels)
         size_ratio = [
-            torch.tensor(x1[i].shape[2:]) /
-            torch.tensor(x1[self.in_index].shape[2:])
+            torch.tensor(x1[i].shape[2:]) / torch.tensor(x1[self.in_index].shape[2:])
             for i in range(len(x1))
         ]
-        flow = self.flow_make(
-            torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
+        flow = self.flow_make(torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
         flow *= self.factor
 
         if not self.attention:
@@ -686,10 +673,8 @@ class ChangeDetCatBifpnShift(ChangeDetCatBifpn):
         x1_out = []
         for i, _x1 in enumerate(x1):
             size = _x1.shape[2:]
-            _flow = F.interpolate(
-                flow_mean, size, mode="bilinear", align_corners=True)
-            _flow = _flow * size_ratio[i][:, None,
-                                          None].type_as(_x1).to(_x1.device)
+            _flow = F.interpolate(flow_mean, size, mode="bilinear", align_corners=True)
+            _flow = _flow * size_ratio[i][:, None, None].type_as(_x1).to(_x1.device)
             warp = self.flow_warp(_x1, _flow, size)
             # warp = _x1
             x1_out.append(warp)
@@ -729,12 +714,10 @@ class ChangeDetCatBifpnShift(ChangeDetCatBifpn):
         x1, x2 = x
         assert len(x1) == len(self.in_channels)
         size_ratio = [
-            torch.tensor(x1[i].shape[2:]) /
-            torch.tensor(x1[self.in_index].shape[2:])
+            torch.tensor(x1[i].shape[2:]) / torch.tensor(x1[self.in_index].shape[2:])
             for i in range(len(x1))
         ]
-        flow = self.flow_make(
-            torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
+        flow = self.flow_make(torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
         flow *= self.factor
 
         # warp loss
@@ -764,10 +747,8 @@ class ChangeDetCatBifpnShift(ChangeDetCatBifpn):
                 _flow = flow_mean
             else:
                 _flow = flow_mean.detach()
-            _flow = F.interpolate(
-                _flow, size, mode="bilinear", align_corners=True)
-            _flow = _flow * size_ratio[i][:, None,
-                                          None].type_as(_x1).to(_x1.device)
+            _flow = F.interpolate(_flow, size, mode="bilinear", align_corners=True)
+            _flow = _flow * size_ratio[i][:, None, None].type_as(_x1).to(_x1.device)
             warp = self.flow_warp(_x1, _flow, size)
             x1_out.append(warp)
         x = [x1_out, x2]
@@ -814,8 +795,7 @@ class ChangeDetCatBifpnShiftNoWarp(ChangeDetCatBifpn):
         momentum=0.9997,
         strides=[4, 8, 16, 32],
     ):
-        super(ChangeDetCatBifpnShiftNoWarp, self).__init__(
-            in_channels, num_channels)
+        super(ChangeDetCatBifpnShiftNoWarp, self).__init__(in_channels, num_channels)
         self.in_channels = in_channels
         self.in_index = in_index
         self.flow_make = nn.Conv2d(
@@ -830,8 +810,7 @@ class ChangeDetCatBifpnShiftNoWarp(ChangeDetCatBifpn):
                 bias=True,
             ),
             nn.ReLU(),
-            nn.Conv2d(in_channels[in_index], 2,
-                      kernel_size=3, padding=1, bias=False),
+            nn.Conv2d(in_channels[in_index], 2, kernel_size=3, padding=1, bias=False),
         )
         self.stride = strides[in_index]
 
@@ -839,8 +818,7 @@ class ChangeDetCatBifpnShiftNoWarp(ChangeDetCatBifpn):
         out_h, out_w = size
         n, c, h, w = input.size()
 
-        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(
-            input).to(input.device)
+        norm = torch.tensor([[[[out_w, out_h]]]]).type_as(input).to(input.device)
         # new
         h_grid = torch.linspace(-1.0, 1.0, out_h).view(-1, 1).repeat(1, out_w)
         w_gird = torch.linspace(-1.0, 1.0, out_w).repeat(out_h, 1)
@@ -856,21 +834,17 @@ class ChangeDetCatBifpnShiftNoWarp(ChangeDetCatBifpn):
         x1, x2 = x
         assert len(x1) == len(self.in_channels)
         size_ratio = [
-            torch.tensor(x1[i].shape[2:]) /
-            torch.tensor(x1[self.in_index].shape[2:])
+            torch.tensor(x1[i].shape[2:]) / torch.tensor(x1[self.in_index].shape[2:])
             for i in range(len(x1))
         ]
-        flow = self.flow_make(
-            torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
+        flow = self.flow_make(torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
         # flow = self.flow_make(x1[self.in_index] + x2[self.in_index])
 
         x1_out = []
         for i, _x1 in enumerate(x1):
             size = _x1.shape[2:]
-            _flow = F.interpolate(
-                flow, size, mode="bilinear", align_corners=True)
-            _flow = _flow * size_ratio[i][:, None,
-                                          None].type_as(_x1).to(_x1.device)
+            _flow = F.interpolate(flow, size, mode="bilinear", align_corners=True)
+            _flow = _flow * size_ratio[i][:, None, None].type_as(_x1).to(_x1.device)
             # warp = self.flow_warp(_x1, _flow, size)
             warp = _x1
             x1_out.append(warp)
@@ -912,21 +886,17 @@ class ChangeDetCatBifpnShiftNoWarp(ChangeDetCatBifpn):
         x1, x2 = x
         assert len(x1) == len(self.in_channels)
         size_ratio = [
-            torch.tensor(x1[i].shape[2:]) /
-            torch.tensor(x1[self.in_index].shape[2:])
+            torch.tensor(x1[i].shape[2:]) / torch.tensor(x1[self.in_index].shape[2:])
             for i in range(len(x1))
         ]
-        flow = self.flow_make(
-            torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
+        flow = self.flow_make(torch.cat([x1[self.in_index], x2[self.in_index]], dim=1))
         # flow = self.flow_make(x1[self.in_index] + x2[self.in_index])
 
         x1_out = []
         for i, _x1 in enumerate(x1):
             size = _x1.shape[2:]
-            _flow = F.interpolate(
-                flow, size, mode="bilinear", align_corners=True)
-            _flow = _flow * size_ratio[i][:, None,
-                                          None].type_as(_x1).to(_x1.device)
+            _flow = F.interpolate(flow, size, mode="bilinear", align_corners=True)
+            _flow = _flow * size_ratio[i][:, None, None].type_as(_x1).to(_x1.device)
             # warp = self.flow_warp(_x1, _flow, size)
             warp = _x1
             x1_out.append(warp)

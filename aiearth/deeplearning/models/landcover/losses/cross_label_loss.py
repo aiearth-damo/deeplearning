@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from aiearth.deeplearning.engine.mmseg.models.builder import LOSSES
-from aiearth.deeplearning.engine.mmseg.models.losses.utils import weight_reduce_loss
+from mmseg.models.builder import LOSSES
+from mmseg.models.losses.utils import weight_reduce_loss
 
 
 def cross_label(
@@ -23,28 +23,23 @@ def cross_label(
     if prob < 0.8:
         if len(pred[label == 3, 3]) != 0:
             pred[label == 3, 3] = torch.max(
-                torch.stack(
-                    (pred[label == 3, 3], pred[label == 3, 4]), dim=0), 0
+                torch.stack((pred[label == 3, 3], pred[label == 3, 4]), dim=0), 0
             )[0]
         if len(pred[label == 4, 4]) != 0:
             pred[label == 4, 4] = torch.max(
-                torch.stack(
-                    (pred[label == 4, 4], pred[label == 4, 3]), dim=0), 0
+                torch.stack((pred[label == 4, 4], pred[label == 4, 3]), dim=0), 0
             )[0]
         if len(pred[label == 4, 4]) != 0:
             pred[label == 4, 4] = torch.max(
-                torch.stack(
-                    (pred[label == 4, 4], pred[label == 4, 1]), dim=0), 0
+                torch.stack((pred[label == 4, 4], pred[label == 4, 1]), dim=0), 0
             )[0]
         if len(pred[label == 4, 4]) != 0:
             pred[label == 4, 4] = torch.max(
-                torch.stack(
-                    (pred[label == 4, 4], pred[label == 4, 9]), dim=0), 0
+                torch.stack((pred[label == 4, 4], pred[label == 4, 9]), dim=0), 0
             )[0]
         if len(pred[label == 9, 9]) != 0:
             pred[label == 9, 9] = torch.max(
-                torch.stack(
-                    (pred[label == 9, 9], pred[label == 9, 4]), dim=0), 0
+                torch.stack((pred[label == 9, 9], pred[label == 9, 4]), dim=0), 0
             )[0]
     loss = F.cross_entropy(
         pred, label, weight=class_weight, reduction="none", ignore_index=ignore_index
@@ -114,8 +109,7 @@ def binary_cross_entropy(
             "Only pred shape [N, C], label shape [N] or pred shape [N, C, "
             "H, W], label shape [N, H, W] are supported"
         )
-        label, weight = _expand_onehot_labels(
-            label, weight, pred.shape, ignore_index)
+        label, weight = _expand_onehot_labels(label, weight, pred.shape, ignore_index)
 
     # weighted element-wise losses
     if weight is not None:
@@ -124,8 +118,7 @@ def binary_cross_entropy(
         pred, label.float(), pos_weight=class_weight, reduction="none"
     )
     # do the reduction for the weighted loss
-    loss = weight_reduce_loss(
-        loss, weight, reduction=reduction, avg_factor=avg_factor)
+    loss = weight_reduce_loss(loss, weight, reduction=reduction, avg_factor=avg_factor)
 
     return loss
 

@@ -5,8 +5,8 @@ import torch
 import torch.nn.functional as F
 import torch.distributed as dist
 
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
-from aiearth.deeplearning.engine.mmseg.models.segmentors.encoder_decoder import EncoderDecoder
+from mmseg.models.builder import SEGMENTORS
+from mmseg.models.segmentors.encoder_decoder import EncoderDecoder
 
 
 @SEGMENTORS.register_module()
@@ -104,8 +104,7 @@ class EncoderDecoderBinary(EncoderDecoder):
                 seg_pred = seg_pred.to(torch.uint8).squeeze(dim=1)
             else:
                 seg_pred = (
-                    (seg_logit > self.test_cfg.thresh).to(
-                        torch.uint8).squeeze(dim=1)
+                    (seg_logit > self.test_cfg.thresh).to(torch.uint8).squeeze(dim=1)
                 )
         else:
             assert semi_probs is None
@@ -152,8 +151,7 @@ class EncoderDecoderBinary(EncoderDecoder):
                 seg_pred = seg_pred.to(torch.uint8).squeeze(dim=1)
             else:
                 seg_pred = (
-                    (seg_logit > self.test_cfg.thresh).to(
-                        torch.uint8).squeeze(dim=1)
+                    (seg_logit > self.test_cfg.thresh).to(torch.uint8).squeeze(dim=1)
                 )
         else:
             assert semi_probs is None
@@ -187,11 +185,9 @@ class EncoderDecoderBinary(EncoderDecoder):
                 for key, value in loss_value.items():
                     log_vars["{}.{}".format(loss_name, key)] = value.mean()
             else:
-                raise TypeError(
-                    f"{loss_name} is not a tensor or list of tensors")
+                raise TypeError(f"{loss_name} is not a tensor or list of tensors")
 
-        loss = sum(_value for _key, _value in log_vars.items()
-                   if "loss" in _key)
+        loss = sum(_value for _key, _value in log_vars.items() if "loss" in _key)
 
         # If the loss_vars has different length, raise assertion error
         # to prevent GPUs from infinite waiting.

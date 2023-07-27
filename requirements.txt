@@ -1,5 +1,8 @@
 aie-sdk
+albumentations
 imgaug
+mmsegmentation==0.29.1
+mmdet==2.28.2
 numpy<=1.23.0
 onnx
 onnxruntime
@@ -16,3 +19,7 @@ tensorboard
 torch < 2.0.0
 torchvision
 tqdm
+opencv-torchvision-transforms-yuzhiyang
+lmdb
+easydict
+descartes

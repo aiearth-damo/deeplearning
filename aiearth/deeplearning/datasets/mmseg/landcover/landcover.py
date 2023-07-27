@@ -6,9 +6,9 @@ import numpy as np
 from mmcv.utils import print_log
 from PIL import Image
 
-from aiearth.deeplearning.engine.mmseg.datasets.builder import DATASETS
-from aiearth.deeplearning.engine.mmseg.datasets.custom import CustomDataset
-from aiearth.deeplearning.engine.mmseg.datasets.pipelines import Compose, LoadAnnotations
+from mmseg.datasets.builder import DATASETS
+from mmseg.datasets.custom import CustomDataset
+from mmseg.datasets.pipelines import Compose, LoadAnnotations
 
 
 @DATASETS.register_module()
@@ -71,10 +71,10 @@ class LandcoverLoader(CustomDataset):
         palette=None,
         gt_seg_map_loader_cfg=None,
     ):
-        #tmp_classes = []
-        #for i in range(int(classes)):
+        # tmp_classes = []
+        # for i in range(int(classes)):
         #    tmp_classes.append(str(i))
-        #classes = tmp_classes
+        # classes = tmp_classes
         self.classes = classes
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
@@ -87,8 +87,7 @@ class LandcoverLoader(CustomDataset):
         self.ignore_index = ignore_index
         self.reduce_zero_label = reduce_zero_label
         self.label_map = None
-        self.CLASSES, self.PALETTE = self.get_classes_and_palette(
-            classes, palette)
+        self.CLASSES, self.PALETTE = self.get_classes_and_palette(classes, palette)
         self.gt_seg_map_loader = (
             LoadAnnotations()
             if gt_seg_map_loader_cfg is None
@@ -191,7 +190,6 @@ class LandcoverLoader(CustomDataset):
         mmcv.mkdir_or_exist(imgfile_prefix)
         result_files = []
         for result, idx in zip(results, indices):
-
             filename = self.img_infos[idx]["filename"]
             basename = osp.splitext(osp.basename(filename))[0]
 
@@ -229,6 +227,5 @@ class LandcoverLoader(CustomDataset):
         assert isinstance(results, list), "results must be a list."
         assert isinstance(indices, list), "indices must be a list."
 
-        result_files = self.results2img(
-            results, imgfile_prefix, to_label_id, indices)
+        result_files = self.results2img(results, imgfile_prefix, to_label_id, indices)
         return result_files

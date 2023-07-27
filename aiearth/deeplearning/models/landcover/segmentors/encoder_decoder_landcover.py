@@ -3,8 +3,10 @@ import torch
 import torch.distributed as dist
 from collections import OrderedDict
 
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
-from aiearth.deeplearning.engine.mmseg.models.segmentors.encoder_decoder import EncoderDecoder
+from mmseg.models.builder import SEGMENTORS
+from mmseg.models.segmentors.encoder_decoder import (
+    EncoderDecoder,
+)
 
 
 @SEGMENTORS.register_module()
@@ -46,11 +48,9 @@ class EncoderDecoderLandcover(EncoderDecoder):
                 for key, value in loss_value.items():
                     log_vars["{}.{}".format(loss_name, key)] = value.mean()
             else:
-                raise TypeError(
-                    f"{loss_name} is not a tensor or list of tensors")
+                raise TypeError(f"{loss_name} is not a tensor or list of tensors")
 
-        loss = sum(_value for _key, _value in log_vars.items()
-                   if "loss" in _key)
+        loss = sum(_value for _key, _value in log_vars.items() if "loss" in _key)
 
         # If the loss_vars have different lengths, raise an assertion error
         # to prevent GPUs from infinite waiting.

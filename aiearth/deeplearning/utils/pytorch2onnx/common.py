@@ -17,11 +17,11 @@ from mmcv import DictAction
 from mmcv.onnx import register_extra_symbolics
 from mmcv.runner import load_checkpoint
 
-from aiearth.deeplearning.engine.mmseg.apis import show_result_pyplot
-from aiearth.deeplearning.engine.mmseg.apis.inference import LoadImage
-from aiearth.deeplearning.engine.mmseg.datasets.pipelines import Compose
-from aiearth.deeplearning.engine.mmseg.models import build_segmentor
-from aiearth.deeplearning.engine.mmseg.ops import resize
+from mmseg.apis import show_result_pyplot
+from mmseg.apis.inference import LoadImage
+from mmseg.datasets.pipelines import Compose
+from mmseg.models import build_segmentor
+from mmseg.ops import resize
 
 torch.manual_seed(3)
 
@@ -65,8 +65,7 @@ def _demo_mm_inputs(input_shape, num_classes):
     imgs = rng.rand(*input_shape)
     if num_classes == 1:
         num_classes = 2
-    segs = rng.randint(low=0, high=num_classes - 1,
-                       size=(N, 1, H, W)).astype(np.uint8)
+    segs = rng.randint(low=0, high=num_classes - 1, size=(N, 1, H, W)).astype(np.uint8)
     img_metas = [
         {
             "img_shape": (H, W, C),
@@ -244,8 +243,7 @@ def pytorch2onnx(
 
         # get onnx output
         input_all = [node.name for node in onnx_model.graph.input]
-        input_initializer = [
-            node.name for node in onnx_model.graph.initializer]
+        input_initializer = [node.name for node in onnx_model.graph.initializer]
         net_feed_input = list(set(input_all) - set(input_initializer))
         assert len(net_feed_input) == 1
         sess = rt.InferenceSession(output_file)
@@ -281,8 +279,7 @@ def pytorch2onnx(
 
             # resize pytorch_result to ori_shape
             pytorch_result_ = cv2.resize(
-                pytorch_result[0].astype(
-                    np.uint8), (ori_shape[1], ori_shape[0])
+                pytorch_result[0].astype(np.uint8), (ori_shape[1], ori_shape[0])
             )
             show_result_pyplot(
                 model,
@@ -302,6 +299,7 @@ def pytorch2onnx(
         )
         print("The outputs are same between Pytorch and ONNX")
 
+
 def to_onnx(cfg, output_path, checkpoint_path=None, shape=(1024, 1024)):
     cfg = copy(cfg)
     cfg.model.pretrained = None
@@ -316,14 +314,12 @@ def to_onnx(cfg, output_path, checkpoint_path=None, shape=(1024, 1024)):
 
     # build the model and load checkpoint
     cfg.model.train_cfg = None
-    segmentor = build_segmentor(
-        cfg.model, train_cfg=None, test_cfg=cfg.get("test_cfg"))
+    segmentor = build_segmentor(cfg.model, train_cfg=None, test_cfg=cfg.get("test_cfg"))
     # convert SyncBN to BN
     segmentor = _convert_batchnorm(segmentor)
 
     if checkpoint_path:
-        checkpoint = load_checkpoint(
-            segmentor, checkpoint_path, map_location="cpu")
+        checkpoint = load_checkpoint(segmentor, checkpoint_path, map_location="cpu")
 
     if isinstance(segmentor.decode_head, nn.ModuleList):
         num_classes = segmentor.decode_head[-1].num_classes

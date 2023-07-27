@@ -2,8 +2,8 @@
 import torch
 import torch.nn as nn
 
-from aiearth.deeplearning.engine.mmseg.models.builder import LOSSES
-from aiearth.deeplearning.engine.mmseg.models.losses.utils import weight_reduce_loss
+from mmseg.models.builder import LOSSES
+from mmseg.models.losses.utils import weight_reduce_loss
 
 # pylint:disable=no-member, super-with-arguments, too-many-locals
 
@@ -60,8 +60,7 @@ class DiceCeLoss(nn.Module):
         else:
             i = (y_true_one_hot * valid_mask).sum((2, 3))
             j = (y_probs_permute * valid_mask).sum((2, 3))
-            intersection = (y_true_one_hot * y_probs_permute *
-                            valid_mask).sum((2, 3))
+            intersection = (y_true_one_hot * y_probs_permute * valid_mask).sum((2, 3))
         score = (2.0 * intersection + smooth) / (i + j + smooth + eps)
         score = score.mean()
         return score
@@ -115,7 +114,6 @@ class DiceCeLoss(nn.Module):
         y_true = y_true.long()
         ce_loss = self.ce_loss(y_pred, y_true)
         return ce_loss, dice_loss
-
 
     def forward(
         self,

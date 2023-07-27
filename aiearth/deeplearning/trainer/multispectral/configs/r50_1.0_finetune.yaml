@@ -1,0 +1,42 @@
+# env setting, default to single gpu training
+dist_url: "env://"
+world_size: -1
+rank: 0
+is_slurm_job: null
+distributed: null
+
+# # env setting, default to single gpu training
+# dist_url: 'tcp://localhost:10003'
+# world_size: -1
+# rank: 0
+# is_slurm_job: null
+# distributed: True
+
+# MISC
+data_dir: ""
+lmdb_dir: "/home/qianwen.qian/old_a100_pai/yuer.qian/data/Bigearthnet/uint8_lbdm"
+checkpoints_dir: "/home/qianwen.qian/mnt_pai/yuer.qian/model_zoo/clsssifiation/BE_rn50_100_fintune"
+resume: ""
+save_path: ""
+pretrained: "/home/qianwen.qian/mnt_pai/yuer.qian/pretrain_model/resnet/B13_rn50_moco_0099_ckpt.pth"
+print_freq: 10
+save_frep: 100
+lmdb: true
+batch_size: 64
+
+# training setting
+bands: all # choices=["all", "RGB"]
+train_frac: 1.0
+backbone: resnet50
+batchsize: 256
+epochs: 100
+num_workers: 8
+lr: 0.05
+# lr: 8.0
+schedule:
+  - 60
+  - 80
+cos: False
+seed: 24
+normalize: false
+linear: False

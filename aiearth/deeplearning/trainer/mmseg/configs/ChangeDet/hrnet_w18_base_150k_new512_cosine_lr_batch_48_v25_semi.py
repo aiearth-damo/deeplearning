@@ -162,7 +162,8 @@ cudnn_benchmark = True
 
 # optimizer
 optimizer = dict(type="SGD", lr=0.005, momentum=0.9, weight_decay=0.0005)
-optimizer_config = dict()
+optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
+fp16 = dict()
 # learning policy
 lr_config = dict(policy="CosineAnnealing", min_lr=1e-5, by_epoch=False)
 # runtime settings

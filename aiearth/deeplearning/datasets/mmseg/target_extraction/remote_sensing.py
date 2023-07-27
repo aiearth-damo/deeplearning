@@ -4,9 +4,9 @@ import mmcv
 import numpy as np
 from PIL import Image
 from mmcv.utils import print_log
-from aiearth.deeplearning.engine.mmseg.utils import get_root_logger
-from aiearth.deeplearning.engine.mmseg.datasets.builder import DATASETS
-from aiearth.deeplearning.engine.mmseg.datasets.custom import CustomDataset
+from mmseg.utils import get_root_logger
+from mmseg.datasets.builder import DATASETS
+from mmseg.datasets.custom import CustomDataset
 
 
 @DATASETS.register_module()
@@ -16,14 +16,13 @@ class RemoteSensingBinary(CustomDataset):
     Args:
         CustomDataset (CustomDataset): CustomDataset class.
     """
-    CLASSES = ('background', 'target')
+
+    CLASSES = ("background", "target")
     PALETTE = [[0, 0, 0], [255, 255, 255]]
 
     def __init__(self, **kwargs):
         """Initialize RemoteSensingBinary dataset class."""
-        super(RemoteSensingBinary, self).__init__(
-            reduce_zero_label=False,
-            **kwargs)
+        super(RemoteSensingBinary, self).__init__(reduce_zero_label=False, **kwargs)
         assert osp.exists(self.img_dir), self.img_dir
 
     def pre_pipeline(self, results):
@@ -32,12 +31,12 @@ class RemoteSensingBinary(CustomDataset):
         Args:
             results (dict): Results dict for pipeline.
         """
-        results['seg_fields'] = []
-        results['img_prefix'] = self.img_dir
-        results['seg_prefix'] = self.ann_dir
-        results['img_infos'] = self.img_infos
+        results["seg_fields"] = []
+        results["img_prefix"] = self.img_dir
+        results["seg_prefix"] = self.ann_dir
+        results["img_infos"] = self.img_infos
         if self.custom_classes:
-            results['label_map'] = self.label_map
+            results["label_map"] = self.label_map
 
     def results2img(self, results, imgfile_prefix, to_label_id, indices=None):
         """Convert results to image.
@@ -56,19 +55,15 @@ class RemoteSensingBinary(CustomDataset):
         mmcv.mkdir_or_exist(imgfile_prefix)
         result_files = []
         for result, idx in zip(results, indices):
-            filename = self.img_infos[idx]['filename']
+            filename = self.img_infos[idx]["filename"]
             basename = osp.splitext(osp.basename(filename))[0]
-            png_filename = osp.join(imgfile_prefix, f'{basename}.png')
+            png_filename = osp.join(imgfile_prefix, f"{basename}.png")
             output = Image.fromarray(result.astype(np.uint8))
             output.save(png_filename)
             result_files.append(png_filename)
         return result_files
 
-    def format_results(self,
-                       results,
-                       imgfile_prefix,
-                       to_label_id=True,
-                       indices=None):
+    def format_results(self, results, imgfile_prefix, to_label_id=True, indices=None):
         """Format results.
 
         Args:
@@ -82,14 +77,12 @@ class RemoteSensingBinary(CustomDataset):
         """
         if indices is None:
             indices = list(range(len(self)))
-        assert isinstance(results, list), 'results must be a list.'
-        assert isinstance(indices, list), 'indices must be a list.'
-        result_files = self.results2img(
-            results, imgfile_prefix, to_label_id, indices)
+        assert isinstance(results, list), "results must be a list."
+        assert isinstance(indices, list), "indices must be a list."
+        result_files = self.results2img(results, imgfile_prefix, to_label_id, indices)
         return result_files
 
-    def load_annotations(self, img_dir, img_suffix, ann_dir, seg_map_suffix,
-                         split):
+    def load_annotations(self, img_dir, img_suffix, ann_dir, seg_map_suffix, split):
         """Load annotations.
 
         Args:
@@ -106,17 +99,17 @@ class RemoteSensingBinary(CustomDataset):
         if split is not None:
             with open(split) as f:
                 for line in f:
-                    if len(line.split(' ')) == 1:
+                    if len(line.split(" ")) == 1:
                         img_name = line.strip()
                         img_info = dict(filename=img_name + img_suffix)
                         if ann_dir is not None:
                             seg_map = img_name + seg_map_suffix
-                            img_info['ann'] = dict(seg_map=seg_map)
+                            img_info["ann"] = dict(seg_map=seg_map)
                         img_infos.append(img_info)
-                    elif len(line.split(' ')) == 2:
-                        img_path, msk_path = line.strip().split(' ')
+                    elif len(line.split(" ")) == 2:
+                        img_path, msk_path = line.strip().split(" ")
                         img_info = dict(filename=img_path)
-                        img_info['ann'] = dict(seg_map=msk_path)
+                        img_info["ann"] = dict(seg_map=msk_path)
                         img_infos.append(img_info)
                     else:
                         print("error image")
@@ -126,9 +119,9 @@ class RemoteSensingBinary(CustomDataset):
                 img_info = dict(filename=img)
                 if ann_dir is not None:
                     seg_map = img.replace(img_suffix, seg_map_suffix)
-                    img_info['ann'] = dict(seg_map=seg_map)
+                    img_info["ann"] = dict(seg_map=seg_map)
                 img_infos.append(img_info)
-            img_infos = sorted(img_infos, key=lambda x: x['filename'])
+            img_infos = sorted(img_infos, key=lambda x: x["filename"])
 
-        print_log(f'Loaded {len(img_infos)} images', logger=get_root_logger())
+        print_log(f"Loaded {len(img_infos)} images", logger=get_root_logger())
         return img_infos

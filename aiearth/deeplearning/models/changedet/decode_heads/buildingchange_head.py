@@ -2,11 +2,11 @@
 import torch
 import torch.nn as nn
 
-from aiearth.deeplearning.engine.mmseg.models.builder import HEADS
-from aiearth.deeplearning.engine.mmseg.models.decode_heads.decode_head import BaseDecodeHead
+from mmseg.models.builder import HEADS
+from mmseg.models.decode_heads.decode_head import BaseDecodeHead
 from mmcv.runner import force_fp32
-from aiearth.deeplearning.engine.mmseg.ops import resize
-from aiearth.deeplearning.engine.mmseg.models.losses import accuracy
+from mmseg.ops import resize
+from mmseg.models.losses import accuracy
 
 
 @HEADS.register_module()
@@ -42,8 +42,7 @@ class BuildingChangeHead(BaseDecodeHead):
         self.concat_input = concat_input
         self.kernel_size = kernel_size
         self.freeze = freeze
-        super(BuildingChangeHead, self).__init__(
-            in_channels, channels, **kwargs)
+        super(BuildingChangeHead, self).__init__(in_channels, channels, **kwargs)
 
         self.b1out = nn.Sequential(
             nn.Conv2d(self.in_channels, self.channels, 3, padding=1),

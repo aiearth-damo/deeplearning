@@ -1,10 +1,10 @@
 # -*- conding: utf-8 -*-
 from torch import nn
 
-from aiearth.deeplearning.engine.mmseg.core import add_prefix
-from aiearth.deeplearning.engine.mmseg.ops import resize
-from aiearth.deeplearning.engine.mmseg.models import builder
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
+from mmseg.core import add_prefix
+from mmseg.ops import resize
+from mmseg.models import builder
+from mmseg.models.builder import SEGMENTORS
 from .change_detector import ChangedetEncoderDecoder
 
 
@@ -84,8 +84,7 @@ class CascadeChangeDetector(ChangedetEncoderDecoder):
         x, x1, x2 = self.extract_feat(img1, img2)
         out = self.decode_head[0].forward_test(x, img_metas, self.test_cfg)
         for i in range(1, self.num_stages):
-            out = self.decode_head[i].forward_test(
-                x, out, img_metas, self.test_cfg)
+            out = self.decode_head[i].forward_test(x, out, img_metas, self.test_cfg)
         out = resize(
             input=out,
             size=img1.shape[2:],

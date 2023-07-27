@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from aiearth.deeplearning.engine.mmseg.models.builder import LOSSES, build_loss
+from mmseg.models.builder import LOSSES, build_loss
 
 
 @LOSSES.register_module()
@@ -96,8 +96,7 @@ class BinaryDiceLoss(nn.Module):
         else:
             uniou_i = (y_true * valid_mask).reshape(BatchSize, -1).sum(1)
             uniou_j = (y_pred * valid_mask).reshape(BatchSize, -1).sum(1)
-            intersection = (y_true * y_pred *
-                            valid_mask).reshape(BatchSize, -1).sum(1)
+            intersection = (y_true * y_pred * valid_mask).reshape(BatchSize, -1).sum(1)
         if self.iou:
             score = (intersection + self.smooth) / (
                 uniou_i + uniou_j - intersection + self.smooth
@@ -141,8 +140,7 @@ class EnsembleLoss(nn.Module):
         """
         losses = {}
         for cur_loss_object in self.loss_list:
-            cur_loss = cur_loss_object(
-                input_data.clone(), label.clone(), **kwargs)
+            cur_loss = cur_loss_object(input_data.clone(), label.clone(), **kwargs)
             losses["{}".format(cur_loss_object.loss_name)] = cur_loss
         return losses
 

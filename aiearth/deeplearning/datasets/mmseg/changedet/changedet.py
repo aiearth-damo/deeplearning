@@ -17,10 +17,10 @@ from prettytable import PrettyTable
 
 import mmcv
 from mmcv.utils import print_log
-from aiearth.deeplearning.engine.mmseg.core import eval_metrics, intersect_and_union
-from aiearth.deeplearning.engine.mmseg.core.evaluation.metrics import total_area_to_metrics
-from aiearth.deeplearning.engine.mmseg.datasets.builder import DATASETS
-from aiearth.deeplearning.engine.mmseg.datasets.custom import CustomDataset
+from mmseg.core import eval_metrics, intersect_and_union
+from mmseg.core.evaluation.metrics import total_area_to_metrics
+from mmseg.datasets.builder import DATASETS
+from mmseg.datasets.custom import CustomDataset
 from .coco_evaluator import InsSegCOCOEvaluator
 
 Image.MAX_IMAGE_PIXELS = None
@@ -38,7 +38,7 @@ def fast_hist(a, b, n):
         numpy.ndarray: The histogram of a and b.
     """
     k = (a >= 0) & (a < n)
-    return np.bincount(n * a[k].astype(int) + b[k], minlength=n ** 2).reshape(n, n)
+    return np.bincount(n * a[k].astype(int) + b[k], minlength=n**2).reshape(n, n)
 
 
 def get_hist(image, label, num_class):
@@ -130,7 +130,7 @@ class ChangeDetDataset(CustomDataset):
     ):
         """
         Initialize the ChangeDetDataset class.
-        
+
         Args:
             split (str): The split of the dataset.
             binary_label (bool, optional): Whether to use binary labels. Defaults to True.
@@ -254,7 +254,7 @@ class ChangeDetDataset(CustomDataset):
     def pre_eval_to_metrics(
         self, pre_eval_results, metrics=["mIoU"], nan_to_num=None, beta=1
     ):
-        """Modified from aiearth.deeplearning.engine.mmseg built-in."""
+        """Modified from mmseg built-in."""
 
         pre_eval_results = tuple(zip(*pre_eval_results))
 
@@ -274,14 +274,14 @@ class ChangeDetDataset(CustomDataset):
         )
 
         return ret_metrics
-    
+
     def multi_pre_eval_to_metrics(self, multi_pre_eval_results):
         """
         Calculates metrics from multi-pre-evaluation results.
-        
+
         Args:
             multi_pre_eval_results (tuple): Tuple of multi-pre-evaluation results.
-        
+
         Returns:
             dict: Dictionary of metrics, including "SenseIoU", "SeK", "SenseScore", "MCD_OA", and "MCD_Fscore".
         """
@@ -302,8 +302,7 @@ class ChangeDetDataset(CustomDataset):
         hist_n0 = hist.copy()
         hist_n0[0][0] = 0
         kappa_n0 = cal_kappa(hist_n0)
-        iu = np.diag(c2hist) / (c2hist.sum(1) +
-                                c2hist.sum(0) - np.diag(c2hist))
+        iu = np.diag(c2hist) / (c2hist.sum(1) + c2hist.sum(0) - np.diag(c2hist))
         IoU_fg = iu[1]
         IoU_mean = (iu[0] + iu[1]) / 2
         Sek = (kappa_n0 * math.exp(IoU_fg)) / math.e
@@ -314,11 +313,9 @@ class ChangeDetDataset(CustomDataset):
 
         # Some new metrics by Bi-SRNet
         acc = np.diag(hist).sum() / hist.sum()
-        mcd_precision = np.diag(hist_fg).sum() / \
-            (hist.sum() - hist[0, :].sum())
+        mcd_precision = np.diag(hist_fg).sum() / (hist.sum() - hist[0, :].sum())
         mcd_recall = np.diag(hist_fg).sum() / (hist.sum() - hist[:, 0].sum())
-        mcd_fscore = 2 * mcd_precision * \
-            mcd_recall / (mcd_precision + mcd_recall)
+        mcd_fscore = 2 * mcd_precision * mcd_recall / (mcd_precision + mcd_recall)
         return {
             "SenseIoU": IoU_mean,
             "SeK": Sek,
@@ -326,13 +323,13 @@ class ChangeDetDataset(CustomDataset):
             "MCD_OA": acc,
             "MCD_Fscore": mcd_fscore,
         }
-    
+
     def ins_pre_eval_to_metrics(self, pre_eval_results):
         """Calculate metrics for the pre-evaluation results of the Change Detection task.
-    
+
         Args:
             pre_eval_results (tuple): Tuple of pre-evaluation results. The first 4 elements are built-in for CD, and the 5th element is for InsIOU.
-        
+
         Returns:
             dict: Dictionary containing the metrics for the pre-evaluation results. The metrics are InsRecall, InsPrecision, and InsIoU.
         """
@@ -361,39 +358,17 @@ class ChangeDetDataset(CustomDataset):
         """
         if self.gt_seg_maps is not None:
             return self.gt_seg_maps
-        
-        CLASSES = self.raw_classes
-        INDEX2CHANGE = self.index2change
-
-        if self.ignore_bg:
-            label_mapping = [255]
-            for cat in CLASSES:
-                for key, value in INDEX2CHANGE.items():
-                    if cat in value:
-                        label_mapping.append(np.uint8(key - 1))
-                        break
-        else:
-            label_mapping = [0]
-            for cat in CLASSES:
-                for key, value in INDEX2CHANGE.items():
-                    if cat in value:
-                        label_mapping.append(key)
-                        break
-        assert len(label_mapping) == len(CLASSES) + 1
-        label_mapping = np.array(label_mapping).astype(np.uint8)
 
         gt_seg_maps = []
         for img_info in self.img_infos:
             seg_map = osp.join(self.ann_dir, img_info["ann"]["seg_map"])
-            gt_seg_map = mmcv.imread(
-                seg_map, flag="unchanged", backend="pillow")
+            gt_seg_map = mmcv.imread(seg_map, flag="unchanged", backend="pillow")
             if self.binary_label:
                 for ignore_label in self.ignore_labels:
                     gt_seg_map[gt_seg_map == ignore_label] = 0
                 gt_seg_map[(gt_seg_map > 0) & (gt_seg_map != 255)] = 1
                 if self.dilate_label:
-                    conv_kernel = cv2.getStructuringElement(
-                        cv2.MORPH_RECT, (7, 7))
+                    conv_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
                     gt_seg_map = cv2.dilate(gt_seg_map, conv_kernel)
             gt_seg_maps.append(gt_seg_map)
         self.gt_seg_maps = gt_seg_maps
@@ -427,8 +402,7 @@ class ChangeDetDataset(CustomDataset):
                         os.path.join(self.img_dir, img2),
                     ]
                 )
-                img_info["ann"] = dict(
-                    seg_map=os.path.join(self.ann_dir, seg_map))
+                img_info["ann"] = dict(seg_map=os.path.join(self.ann_dir, seg_map))
                 img_infos.append(img_info)
             else:
                 img1, img2 = record
@@ -473,12 +447,12 @@ class ChangeDetDataset(CustomDataset):
     def results2img_mcd(self, results, imgfile_prefix, indices):
         """
         Convert the results of a ChangeDetection dataset into an image file.
-        
+
         Args:
             results (list): List of results from the ChangeDetection dataset.
             imgfile_prefix (str): Prefix of the image file.
             indices (list): List of indices of the results.
-        
+
         Returns:
             result_files (list): List of image files.
         """
@@ -506,8 +480,7 @@ class ChangeDetDataset(CustomDataset):
             else:
                 res = result.astype(np.uint8)
             combined_res[res == 0] = 0
-            io.imsave(png_filename, combined_res.astype(
-                np.uint8), check_contrast=False)
+            io.imsave(png_filename, combined_res.astype(np.uint8), check_contrast=False)
             result_files.append(png_filename)
 
         return result_files
@@ -530,8 +503,7 @@ class ChangeDetDataset(CustomDataset):
         """
         mcd_flag = isinstance(results[0], dict)
         if mcd_flag:
-            result_files = self.results2img_mcd(
-                results, imgfile_prefix, indices)
+            result_files = self.results2img_mcd(results, imgfile_prefix, indices)
             return result_files
 
         mmcv.mkdir_or_exist(imgfile_prefix)
@@ -549,14 +521,12 @@ class ChangeDetDataset(CustomDataset):
             basename = ".".join(filenames[0].split("/")[-1].split(".")[:-1])
             png_filename = os.path.join(imgfile_prefix, basename + ".png")
             if semi_result is None:
-                io.imsave(png_filename, result.astype(
-                    np.uint8), check_contrast=False)
+                io.imsave(png_filename, result.astype(np.uint8), check_contrast=False)
             else:
                 res = np.ones_like(result, dtype=np.uint8) * 255
                 res[semi_result[0] < 1] = 0
                 res[semi_result[1] > 0] = 1
-                io.imsave(png_filename, res.astype(
-                    np.uint8), check_contrast=False)
+                io.imsave(png_filename, res.astype(np.uint8), check_contrast=False)
             result_files.append(png_filename)
 
         return result_files
@@ -610,13 +580,13 @@ class ChangeDetDataset(CustomDataset):
     def compute_instance_IoU(self, results, gt_seg_maps, thresh=0.1, min_scale=50):
         """
         Compute the instance-level Intersection over Union (IoU) of the given results and ground truth segmentation maps.
-        
+
         Args:
             results (list): List of segmentation maps.
             gt_seg_maps (list): List of ground truth segmentation maps.
             thresh (float): Threshold for IoU calculation.
             min_scale (int): Minimum scale for IoU calculation.
-        
+
         Returns:
             dict: Dictionary containing the recall, precision, and IoU values.
         """
@@ -699,8 +669,7 @@ class ChangeDetDataset(CustomDataset):
                 for i_gt in range(len(gts_encode)):
                     if iou_matrix[i_gt, :].max() > thresh:
                         hit_num += 1
-                        pred_hit_set |= set(
-                            np.where(iou_matrix[i_gt, :] > 0)[0])
+                        pred_hit_set |= set(np.where(iou_matrix[i_gt, :] > 0)[0])
                 pred_hit_num += len(pred_hit_set)
         if old_flag:
             recall = hit_num / gt_num
@@ -715,13 +684,13 @@ class ChangeDetDataset(CustomDataset):
     def compute_instance_IoU_pre(self, results, gt_seg_maps, thresh=0.1, min_scale=50):
         """
         Computes the instance IoU of the given results and ground truth segmentation maps.
-        
+
         Args:
             results (list): List of results.
             gt_seg_maps (list): List of ground truth segmentation maps.
             thresh (float): Threshold for IoU.
             min_scale (int): Minimum scale for IoU.
-        
+
         Returns:
             hist_flat (torch.tensor): Tensor containing the hit number, predicted hit number, predicted number, and ground truth number.
         """
@@ -806,8 +775,7 @@ class ChangeDetDataset(CustomDataset):
                 for i_gt in range(len(gts_encode)):
                     if iou_matrix[i_gt, :].max() > thresh:
                         hit_num += 1
-                        pred_hit_set |= set(
-                            np.where(iou_matrix[i_gt, :] > 0)[0])
+                        pred_hit_set |= set(np.where(iou_matrix[i_gt, :] > 0)[0])
                 pred_hit_num += len(pred_hit_set)
         hist_flat = torch.tensor([hit_num, pred_hit_num, pred_num, gt_num])
         return hist_flat
@@ -858,8 +826,7 @@ class ChangeDetDataset(CustomDataset):
             seg_preds = results
             if "InsIoU" in metric:
                 metric.remove("InsIoU")
-                ret_metrics.update(
-                    self.compute_instance_IoU(seg_preds, gt_seg_maps))
+                ret_metrics.update(self.compute_instance_IoU(seg_preds, gt_seg_maps))
             if "SeK" in metric:
                 metric.remove("SeK")
 
@@ -884,8 +851,7 @@ class ChangeDetDataset(CustomDataset):
         eval_results = {}
         print_log("\n############# Eval for binary class ##############")
         class_names = ("background", "changedarea")
-        binary_eval_results = self.output_results(
-            ret_metrics, logger, class_names)
+        binary_eval_results = self.output_results(ret_metrics, logger, class_names)
         eval_results.update(binary_eval_results)
         return eval_results
 
@@ -916,8 +882,7 @@ class ChangeDetDataset(CustomDataset):
         hist_n0 = hist.copy()
         hist_n0[0][0] = 0
         kappa_n0 = cal_kappa(hist_n0)
-        iu = np.diag(c2hist) / (c2hist.sum(1) +
-                                c2hist.sum(0) - np.diag(c2hist))
+        iu = np.diag(c2hist) / (c2hist.sum(1) + c2hist.sum(0) - np.diag(c2hist))
         IoU_fg = iu[1]
         IoU_mean = (iu[0] + iu[1]) / 2
         Sek = (kappa_n0 * math.exp(IoU_fg)) / math.e
@@ -929,14 +894,14 @@ class ChangeDetDataset(CustomDataset):
 
     def output_results(self, ret_metrics, logger, class_names):
         """Output results for CD and MCD.
-    
+
         This function outputs the results for CD and MCD, including a summary table and a table for each class. It also updates the eval_results dictionary with the metrics and their values.
-        
+
         Args:
             ret_metrics (dict): A dictionary containing the metrics and their values.
             logger (Logger): A logger object.
             class_names (list): A list of class names.
-        
+
         Returns:
             eval_results (dict): A dictionary containing the metrics and their values.
         """

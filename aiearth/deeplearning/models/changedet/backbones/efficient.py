@@ -4,8 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
 from .efficientnet_pytorch import EfficientNet as EffNet
-from aiearth.deeplearning.engine.mmseg.models.builder import BACKBONES
-from aiearth.deeplearning.engine.mmseg.utils import get_root_logger
+from mmseg.models.builder import BACKBONES
+from mmseg.utils import get_root_logger
 from mmcv.runner import load_checkpoint
 
 nonlinearity = partial(F.relu, inplace=True)

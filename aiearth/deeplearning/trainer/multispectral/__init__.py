@@ -1,0 +1,1 @@
+from .multispectral_cls_trainer import MSClsTrainer

@@ -102,3 +102,6 @@ model = dict(
     ),
     test_cfg=dict(mode="whole_sigmoid", thresh=0.5),
 )
+# optimizer
+optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
+fp16 = dict()

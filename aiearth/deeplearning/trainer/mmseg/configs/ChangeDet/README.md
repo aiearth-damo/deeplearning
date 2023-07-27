@@ -13,7 +13,7 @@
 
 ### 配置2
 [hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)：
-使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota模型：`aie://ChangeDet/changedet_hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.pth`，就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
+使用该配置，可以训练出一个sota的hrnet18模型。我们已经提供的sota[模型](xxx.pth)就是基于该配置和相关数据训练而成。或者如果你有自己的需要，可以参考此配置文件完成一次从头训练。
 
 ### 配置3
 [hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.py)：
@@ -22,4 +22,6 @@
 ### 配置4
 [hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_semi](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_semi.py):
 使用该配置可以引入额外的无标签数据对模型进行半监督训练，提升模型的表现能力。
-使用方法：使用[配置2](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)或者[配置3](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.py)得到一个sota表现的模型以后，通过[推理](/quickstart.ipynb#Test)功能对无标签数据打好伪标签，然后使用该配置完成半监督训练。
+使用方法：
+#### 步骤 1
+使用[配置2](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25.py)或者[配置3](hrnet_w18_base_150k_new512_cosine_lr_batch_48_v25_finetune.py)得到一个sota表现的模型以后，通过[推理](/quickstart.ipynb#Test)功能保存无标签数据的伪标签。

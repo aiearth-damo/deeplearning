@@ -70,8 +70,7 @@ crop_size = (896, 896)
 train_pipeline = [
     dict(type="LoadDoubleImageFromFile"),
     dict(type="LoadAnnotations"),
-    dict(type="DoubleImageResize", img_scale=(
-        1024, 1024), ratio_range=(0.5, 2.0)),
+    dict(type="DoubleImageResize", img_scale=(1024, 1024), ratio_range=(0.5, 2.0)),
     dict(type="DoubleImageRandomCrop", crop_size=crop_size, cat_max_ratio=1.0),
     dict(type="DoubleImageRandomFog", prob=0.05, size=400, random_color=True),
     dict(type="DoubleImageRandomFlip", prob=0.5),
@@ -166,3 +165,5 @@ evaluation = dict(
     pre_eval=True,
 )
 find_unused_parameters = True
+optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
+fp16 = dict()

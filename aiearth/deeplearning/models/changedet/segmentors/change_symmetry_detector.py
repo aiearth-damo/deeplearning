@@ -2,11 +2,11 @@
 import torch
 import torch.nn as nn
 
-from aiearth.deeplearning.engine.mmseg.ops import resize
-from aiearth.deeplearning.engine.mmseg.core import add_prefix
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
+from mmseg.ops import resize
+from mmseg.core import add_prefix
+from mmseg.models.builder import SEGMENTORS
 
-# from aiearth.deeplearning.engine.mmseg.models.segmentors.encoder_decoder import EncoderDecoder
+# from mmseg.models.segmentors.encoder_decoder import EncoderDecoder
 from .change_detector import ChangedetEncoderDecoder
 
 

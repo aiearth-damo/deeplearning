@@ -1,0 +1,44 @@
+# env setting, default to single gpu training
+dist_url: "env://"
+world_size: -1
+rank: 0
+is_slurm_job: null
+distributed: null
+
+# # env setting, default to single gpu training
+# dist_url: 'tcp://localhost:10003'
+# world_size: -1
+# rank: 0
+# is_slurm_job: null
+# distributed: True
+
+# MISC
+data_dir: ""
+lmdb_dir: "/home/qianwen.qian/old_a100_pai/yuer.qian/data/Bigearthnet/uint8_lbdm"
+checkpoints_dir: "/home/qianwen.qian/mnt_pai/yuer.qian/model_zoo/clsssifiation/BE_swin_tiny_10_linear_fintune"
+resume: ""
+save_path: ""
+pretrained: "/home/qianwen.qian/mnt_pai/yuer.qian/code/SSL4EO-S12/src/benchmark/pretrain_ssl/output/simmim_pretrain/simmim_pretrain_swin_tiny_img224_window7_100ep_b256_ms/ckpt_epoch_99.pth"
+print_freq: 10
+save_frep: 100
+lmdb: true
+batch_size: 64
+
+# training setting
+bands: all # choices=["all", "RGB"]
+train_frac: 1.0
+backbone: swin_tiny
+batchsize: 256
+epochs: 100
+num_workers: 8
+lr: 0.01
+momentum: 0.9
+weight_decay: 0
+# lr: 8.0
+schedule:
+  - 60
+  - 80
+cos: True
+seed: 24
+normalize: false
+linear: False

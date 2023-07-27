@@ -2,8 +2,8 @@ import os.path as osp
 import os
 import tempfile
 
-from aiearth.deeplearning.engine.mmseg.datasets.builder import DATASETS
-from aiearth.deeplearning.engine.mmseg.datasets.custom import CustomDataset
+from mmseg.datasets.builder import DATASETS
+from mmseg.datasets.custom import CustomDataset
 import mmcv
 from PIL import Image
 import numpy as np
@@ -24,19 +24,29 @@ class BuildingChangeDataset(CustomDataset):
         classes (int): Number of classes. Default: None.
     """
 
-    def __init__(self, split, binary_label=False, ignore_bg=False, ignore_labels=[], classes=None,**kwargs):
+    def __init__(
+        self,
+        split,
+        binary_label=False,
+        ignore_bg=False,
+        ignore_labels=[],
+        classes=None,
+        **kwargs,
+    ):
         self.binary_label = binary_label
-        tmp_classes=[]
+        tmp_classes = []
         for i in range(int(classes)):
             tmp_classes.append(str(i))
-        self.CLASSES=tmp_classes
+        self.CLASSES = tmp_classes
         if not isinstance(ignore_labels, list):
             ignore_labels = [ignore_labels]
         self.ignore_bg = ignore_bg
         self.ignore_labels = ignore_labels
         super(BuildingChangeDataset, self).__init__(
-            img_suffix='.jpg', seg_map_suffix='.png', split=split, **kwargs)
-#         assert osp.exists(self.img_dir) and self.split is not None
+            img_suffix=".jpg", seg_map_suffix=".png", split=split, **kwargs
+        )
+
+    #         assert osp.exists(self.img_dir) and self.split is not None
 
     def get_gt_seg_maps(self, efficient_test=False):
         """Get ground truth segmentation maps for evaluation.
@@ -49,9 +59,8 @@ class BuildingChangeDataset(CustomDataset):
         """
         gt_seg_maps = []
         for img_info in self.img_infos:
-            seg_map = osp.join(self.ann_dir, img_info['ann']['seg_map'])
-            gt_seg_map = mmcv.imread(
-                seg_map, flag='unchanged', backend='pillow')
+            seg_map = osp.join(self.ann_dir, img_info["ann"]["seg_map"])
+            gt_seg_map = mmcv.imread(seg_map, flag="unchanged", backend="pillow")
             if self.binary_label:
                 for ignore_label in self.ignore_labels:
                     gt_seg_map[gt_seg_map == ignore_label] = 0
@@ -61,8 +70,7 @@ class BuildingChangeDataset(CustomDataset):
             gt_seg_maps.append(gt_seg_map)
         return gt_seg_maps
 
-    def load_annotations(self, img_dir, img_suffix, ann_dir, seg_map_suffix,
-                         split):
+    def load_annotations(self, img_dir, img_suffix, ann_dir, seg_map_suffix, split):
         """Load annotation from directory.
 
         Args:
@@ -83,20 +91,20 @@ class BuildingChangeDataset(CustomDataset):
             if len(record) == 3:
                 img1, img2, seg_map = record
                 img1 = osp.join(self.img_dir, img1)
-                img2 = osp.join(self.img_dir, img2)    
-                seg_map = osp.join(self.ann_dir, seg_map)    
+                img2 = osp.join(self.img_dir, img2)
+                seg_map = osp.join(self.ann_dir, seg_map)
                 img_info = dict(filename=[img1, img2])
-                img_info['ann'] = dict(seg_map=seg_map)
+                img_info["ann"] = dict(seg_map=seg_map)
                 img_infos.append(img_info)
             else:
                 img1, img2 = record
                 img1 = osp.join(self.img_dir, img1)
-                img2 = osp.join(self.img_dir, img2)  
+                img2 = osp.join(self.img_dir, img2)
                 img_info = dict(filename=[img1, img2])
                 img_infos.append(img_info)
         return img_infos
-    
-    def results2img(self, results, imgfile_prefix, to_label_id,indices):
+
+    def results2img(self, results, imgfile_prefix, to_label_id, indices):
         """Write the segmentation results to images.
 
         Args:
@@ -113,7 +121,7 @@ class BuildingChangeDataset(CustomDataset):
             list[str: str]: result txt files which contains corresponding
             semantic segmentation images.
         """
-        if 'ann' in self.img_infos[0].keys():
+        if "ann" in self.img_infos[0].keys():
             save_mode = 0
         else:
             save_mode = 1
@@ -128,23 +136,25 @@ class BuildingChangeDataset(CustomDataset):
                 edge_result = None
             if to_label_id:
                 result = self._convert_to_label_id(result)
-            filenames = self.img_infos[idx]['filename']
+            filenames = self.img_infos[idx]["filename"]
             if save_mode == 0:
-                gtname = self.img_infos[idx]['ann']['seg_map']
-                filename = filenames[0].split('/')[-1]
+                gtname = self.img_infos[idx]["ann"]["seg_map"]
+                filename = filenames[0].split("/")[-1]
                 basename = osp.splitext(osp.basename(filename))[0]
-                
-                png_filename = osp.join(imgfile_prefix, f'{basename}.png')
+
+                png_filename = osp.join(imgfile_prefix, f"{basename}.png")
                 cv2.imwrite(png_filename, result)
             elif save_mode == 1:
-                filename = filenames[0].split('/')[-1]
+                filename = filenames[0].split("/")[-1]
                 basename = osp.splitext(osp.basename(filename))[0]
-                png_filename = osp.join(imgfile_prefix, f'{basename}.png')
+                png_filename = osp.join(imgfile_prefix, f"{basename}.png")
                 cv2.imwrite(png_filename, result)
 
         return result_files
 
-    def format_results(self, results, imgfile_prefix=None, to_label_id=False,indices=None):
+    def format_results(
+        self, results, imgfile_prefix=None, to_label_id=False, indices=None
+    ):
         """Format the results into dir (standard format for Cityscapes
         evaluation).
 
@@ -166,25 +176,22 @@ class BuildingChangeDataset(CustomDataset):
 
         if indices is None:
             indices = list(range(len(self)))
-        
-        assert isinstance(results, list), 'results must be a list.'
-        assert isinstance(indices, list), 'indices must be a list.'
+
+        assert isinstance(results, list), "results must be a list."
+        assert isinstance(indices, list), "indices must be a list."
 
         if imgfile_prefix is None:
             tmp_dir = tempfile.TemporaryDirectory()
             imgfile_prefix = tmp_dir.name
         else:
             tmp_dir = None
-        result_files = self.results2img(results, imgfile_prefix, to_label_id,indices=indices)
+        result_files = self.results2img(
+            results, imgfile_prefix, to_label_id, indices=indices
+        )
 
         return result_files
-    
 
-    def compute_instance_IoU(self,
-                            results,
-                            gt_seg_maps,
-                            thresh=0.1,
-                            min_scale=50):
+    def compute_instance_IoU(self, results, gt_seg_maps, thresh=0.1, min_scale=50):
         """Compute instance IoU.
 
         Args:
@@ -204,14 +211,17 @@ class BuildingChangeDataset(CustomDataset):
             encode_instances = []
             h, w = mask.shape[:2]
 
-            contours, hierarchy = cv2.findContours(mask,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+            contours, hierarchy = cv2.findContours(
+                mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE
+            )
 
             index_set = set()
             index = 0
             while index >= 0 and len(contours) > 0:
                 assert hierarchy[0][index][3] == -1
-                assert index not in index_set, \
-                    error_string('index({}) is already in index_set({})'.format(index, index_set))
+                assert index not in index_set, error_string(
+                    "index({}) is already in index_set({})".format(index, index_set)
+                )
                 index_set.add(index)
                 single_contours = []
                 single_contours.append(contours[index])
@@ -219,8 +229,11 @@ class BuildingChangeDataset(CustomDataset):
                 while child_id >= 0:
                     assert hierarchy[0][child_id][3] == index
                     assert hierarchy[0][child_id][2] == -1
-                    assert child_id not in index_set, \
-                        error_string('child_id({}) is already in index_set({})'.format(child_id, index_set))
+                    assert child_id not in index_set, error_string(
+                        "child_id({}) is already in index_set({})".format(
+                            child_id, index_set
+                        )
+                    )
                     index_set.add(child_id)
 
                     single_contours.append(contours[child_id])
@@ -229,12 +242,12 @@ class BuildingChangeDataset(CustomDataset):
                     if brother_id >= 0:
                         assert hierarchy[0][brother_id][1] == child_id
                     child_id = brother_id
-                
-                #TODO process to single_contours
+
+                # TODO process to single_contours
                 _mask = np.zeros([h, w], dtype=np.uint8)
                 _mask = cv2.drawContours(_mask, single_contours, -1, 1, -1)
                 if _mask.sum() > min_scale:
-                    _mask = np.asfortranarray(_mask) 
+                    _mask = np.asfortranarray(_mask)
                     encode_instances.append(maskUtils.encode(_mask))
 
                 brother_id = hierarchy[0][index][0]
@@ -249,8 +262,8 @@ class BuildingChangeDataset(CustomDataset):
         pred_num = 0
         gt_num = 0
         for result, gt_seg_map in zip(results, gt_seg_maps):
-            #TODO merge adjacent instances
-            kernel = np.ones((5, 5), np.uint8) 
+            # TODO merge adjacent instances
+            kernel = np.ones((5, 5), np.uint8)
             gt_seg_map = cv2.dilate(gt_seg_map, kernel, iterations=1)
             gt_seg_map = cv2.erode(gt_seg_map, kernel, iterations=1)
 
@@ -269,7 +282,7 @@ class BuildingChangeDataset(CustomDataset):
         recall = hit_num / gt_num
         precision = hit_num / pred_num
         iou = hit_num / (gt_num + pred_num - hit_num)
-        return {'InsRecall': recall, 'InsPrecision': precision, 'InsIoU': iou}
+        return {"InsRecall": recall, "InsPrecision": precision, "InsIoU": iou}
 
     '''
     def evaluate(self,

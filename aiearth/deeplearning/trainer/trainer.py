@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from aiearth.deeplearning.cloud.model import AIEModel
 
+
 class Trainer(ABC):
     @abstractmethod
     def train(self, validate):

@@ -133,3 +133,4 @@ docker
 note.md
 update_docker.sh
 .DS_Store
+tests

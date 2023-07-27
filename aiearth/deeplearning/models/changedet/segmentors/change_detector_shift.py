@@ -3,14 +3,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from aiearth.deeplearning.engine.mmseg.ops import resize
-from aiearth.deeplearning.engine.mmseg.core import add_prefix
-from aiearth.deeplearning.engine.mmseg.models.builder import SEGMENTORS
+from mmseg.ops import resize
+from mmseg.core import add_prefix
+from mmseg.models.builder import SEGMENTORS
 
-# from aiearth.deeplearning.engine.mmseg.models.segmentors.encoder_decoder import EncoderDecoder
+# from mmseg.models.segmentors.encoder_decoder import EncoderDecoder
 from .change_encoder_decoder import ChangeEncoderDecoder
 from mmcv.runner import auto_fp16
-from aiearth.deeplearning.engine.mmseg.models import builder
+from mmseg.models import builder
 
 
 @SEGMENTORS.register_module()
@@ -49,8 +49,7 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
             if isinstance(multiclass_auxiliary_head, list):
                 self.multiclass_auxiliary_head = nn.ModuleList()
                 for head_cfg in multiclass_auxiliary_head:
-                    self.multiclass_auxiliary_head.append(
-                        builder.build_head(head_cfg))
+                    self.multiclass_auxiliary_head.append(builder.build_head(head_cfg))
             else:
                 self.multiclass_auxiliary_head = builder.build_head(
                     multiclass_auxiliary_head
@@ -64,11 +63,9 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
             if isinstance(edge_auxiliary_head, list):
                 self.edge_auxiliary_head = nn.ModuleList()
                 for head_cfg in edge_auxiliary_head:
-                    self.edge_auxiliary_head.append(
-                        builder.build_head(head_cfg))
+                    self.edge_auxiliary_head.append(builder.build_head(head_cfg))
             else:
-                self.edge_auxiliary_head = builder.build_head(
-                    edge_auxiliary_head)
+                self.edge_auxiliary_head = builder.build_head(edge_auxiliary_head)
 
     def extract_feat(self, img1, img2):
         """Extract features from images."""
@@ -199,18 +196,15 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
         """
         losses = dict()
         if self.shift_loss:
-            x, x1, x2, loss_encode = self.extract_feat_loss(
-                img1, img2, kwargs["shift"])
+            x, x1, x2, loss_encode = self.extract_feat_loss(img1, img2, kwargs["shift"])
             losses.update(loss_encode)
         else:
             x, x1, x2 = self.extract_feat(img1, img2)
 
-        loss_decode = self._decode_head_forward_train(
-            x, img_metas, gt_semantic_seg)
+        loss_decode = self._decode_head_forward_train(x, img_metas, gt_semantic_seg)
         losses.update(loss_decode)
         if self.with_auxiliary_head:
-            loss_aux = self._auxiliary_head_forward_train(
-                x, img_metas, gt_semantic_seg)
+            loss_aux = self._auxiliary_head_forward_train(x, img_metas, gt_semantic_seg)
             losses.update(loss_aux)
 
         if self.with_multiclass_auxiliary_head:
@@ -322,8 +316,7 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
                     x1 = max(x2 - w_crop, 0)
                     crop_img1 = img1[:, :, y1:y2, x1:x2]
                     crop_img2 = img2[:, :, y1:y2, x1:x2]
-                    crop_seg_logit = self.encode_decode(
-                        crop_img1, crop_img2, img_meta)
+                    crop_seg_logit = self.encode_decode(crop_img1, crop_img2, img_meta)
                     # preds += F.pad(crop_seg_logit,
                     #                (int(x1), int(preds.shape[3] - x2), int(y1),
                     #                 int(preds.shape[2] - y2)))
@@ -411,8 +404,7 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
         flip = img_meta[0]["flip"]
         if flip:
             flip_direction = img_meta[0]["flip_direction"]
-            assert flip_direction in ["original",
-                                      "horizontal", "vertical", "diagonal"]
+            assert flip_direction in ["original", "horizontal", "vertical", "diagonal"]
             if flip_direction == "horizontal":
                 output = output.flip(dims=(3,))
             elif flip_direction == "vertical":
@@ -484,8 +476,8 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
             cur_col_index = cur_index % input_grid_size
 
             cur_logistic = logistic[
-                cur_row_index * crop_h: cur_row_index * crop_h + crop_h,
-                cur_col_index * crop_w: cur_col_index * crop_w + crop_w,
+                cur_row_index * crop_h : cur_row_index * crop_h + crop_h,
+                cur_col_index * crop_w : cur_col_index * crop_w + crop_w,
             ]
 
             cur_logistic = rotate_image(cur_logistic, cur_rotate_mode)
@@ -510,8 +502,7 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
         # to save memory, we get augmented seg logit inplace
         seg_logit = self.inference(imgs1[0], imgs2[0], img_metas[0], rescale)
         for i in range(1, len(imgs1)):
-            cur_seg_logit = self.inference(
-                imgs1[i], imgs2[i], img_metas[i], rescale)
+            cur_seg_logit = self.inference(imgs1[i], imgs2[i], img_metas[i], rescale)
             seg_logit += cur_seg_logit
         seg_logit /= len(imgs1)
 
@@ -527,13 +518,11 @@ class ChangedetEncoderDecoderShift(ChangeEncoderDecoder):
         return seg_pred
 
     def train_step(self, data_batch, optimizer, **kwargs):
-
         losses = self(**data_batch)
         loss, log_vars = self._parse_losses(losses)
 
         outputs = dict(
-            loss=loss, log_vars=log_vars, num_samples=len(
-                data_batch["img1"].data)
+            loss=loss, log_vars=log_vars, num_samples=len(data_batch["img1"].data)
         )
 
         return outputs

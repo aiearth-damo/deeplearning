@@ -4,7 +4,7 @@ import numpy as np
 from skimage import io
 import rasterio
 from rasterio.plot import reshape_as_image
-from aiearth.deeplearning.engine.mmseg.datasets.builder import PIPELINES
+from mmseg.datasets.builder import PIPELINES
 
 @PIPELINES.register_module()
 class LoadDoubleImageFromFile(object):

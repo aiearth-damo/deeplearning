@@ -1,6 +1,7 @@
-from aiearth.deeplearning.engine.mmseg.datasets.pipelines.test_time_aug import MultiScaleFlipAug
-from aiearth.deeplearning.engine.mmseg.datasets.builder import PIPELINES
+from mmseg.datasets.pipelines.test_time_aug import MultiScaleFlipAug
+from mmseg.datasets.builder import PIPELINES
 import mmcv, warnings
+
 
 @PIPELINES.register_module()
 class MultiScaleFlipAugCD(MultiScaleFlipAug):
@@ -13,6 +14,7 @@ class MultiScaleFlipAugCD(MultiScaleFlipAug):
         flip (bool): Whether to flip images.
         flip_direction (str): Flip direction. Options are "horizontal" and "vertical".
     """
+
     def __init__(self, **kwargs):
         super(MultiScaleFlipAugCD, self).__init__(**kwargs)
 
@@ -27,9 +29,8 @@ class MultiScaleFlipAugCD(MultiScaleFlipAug):
         """
         aug_data = []
         if self.img_scale is None and mmcv.is_list_of(self.img_ratios, float):
-            h, w = results.get('img', results['img1']).shape[:2]
-            img_scale = [(int(w * ratio), int(h * ratio))
-                         for ratio in self.img_ratios]
+            h, w = results.get("img", results["img1"]).shape[:2]
+            img_scale = [(int(w * ratio), int(h * ratio)) for ratio in self.img_ratios]
         else:
             img_scale = self.img_scale
         flip_aug = [False, True] if self.flip else [False]
@@ -37,9 +38,9 @@ class MultiScaleFlipAugCD(MultiScaleFlipAug):
             for flip in flip_aug:
                 for direction in self.flip_direction:
                     _results = results.copy()
-                    _results['scale'] = scale
-                    _results['flip'] = flip
-                    _results['flip_direction'] = direction
+                    _results["scale"] = scale
+                    _results["flip"] = flip
+                    _results["flip_direction"] = direction
                     data = self.transforms(_results)
                     aug_data.append(data)
         # list of dict to dict of list

@@ -16,10 +16,10 @@ from mmcv.runner import load_checkpoint
 from torch import nn
 from onnx import helper
 
-from aiearth.deeplearning.engine.mmseg.apis import show_result_pyplot
-from aiearth.deeplearning.engine.mmseg.apis.inference import LoadImage
-from aiearth.deeplearning.engine.mmseg.datasets.pipelines import Compose
-from aiearth.deeplearning.engine.mmseg.models import build_segmentor
+from mmseg.apis import show_result_pyplot
+from mmseg.apis.inference import LoadImage
+from mmseg.datasets.pipelines import Compose
+from mmseg.models import build_segmentor
 
 torch.manual_seed(3)
 
@@ -255,8 +255,7 @@ def pytorch2onnx(
 
         # get onnx output
         input_all = [node.name for node in onnx_model.graph.input]
-        input_initializer = [
-            node.name for node in onnx_model.graph.initializer]
+        input_initializer = [node.name for node in onnx_model.graph.initializer]
         net_feed_input = sorted(list(set(input_all) - set(input_initializer)))
         assert len(net_feed_input) == 2
         sess = rt.InferenceSession(output_file)
@@ -298,8 +297,7 @@ def pytorch2onnx(
 
             # resize pytorch_result to ori_shape
             pytorch_result_ = cv2.resize(
-                pytorch_result[0].astype(
-                    np.uint8), (ori_shape[1], ori_shape[0])
+                pytorch_result[0].astype(np.uint8), (ori_shape[1], ori_shape[0])
             )
             show_result_pyplot(
                 model,
@@ -342,14 +340,12 @@ def to_onnx(cfg, output_path, checkpoint_path=None, shape=(1024, 1024)):
 
     # build the model and load checkpoint
     cfg.model.train_cfg = None
-    segmentor = build_segmentor(
-        cfg.model, train_cfg=None, test_cfg=cfg.get("test_cfg"))
+    segmentor = build_segmentor(cfg.model, train_cfg=None, test_cfg=cfg.get("test_cfg"))
     # convert SyncBN to BN
     segmentor = _convert_batchnorm(segmentor)
 
     if checkpoint_path != None:
-        checkpoint = load_checkpoint(
-            segmentor, checkpoint_path, map_location="cpu")
+        checkpoint = load_checkpoint(segmentor, checkpoint_path, map_location="cpu")
         # segmentor.CLASSES = checkpoint['meta']['CLASSES']
         # segmentor.PALETTE = checkpoint['meta']['PALETTE']
 
